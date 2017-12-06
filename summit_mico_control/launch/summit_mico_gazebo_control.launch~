@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <arg name="use_trajectory_controller" default="true"/>
+  
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find summit_mico_control)/config/summit_mico_gazebo_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+<!--  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"-->
+<!--    output="screen" args="-->
+<!--                      summit_control-->
+<!--                      mico_control -->
+<!--                      shutdown-timeout 1-->
+<!--                      ">-->
+<!--  </node>-->
+
+  <group unless="$(arg use_trajectory_controller)">
+  <!-- load the joint by joint position controllers -->  
+    <node name="mico_joints_controller" pkg="controller_manager" type="spawner" respawn="true"
+        output="screen" ns="mico_control" 
+       args="joint_1_position_controller joint_2_position_controller  
+               joint_3_position_controller joint_4_position_controller
+               joint_5_position_controller joint_6_position_controller 
+               finger_2_position_controller finger_1_position_controller 
+               finger_3_position_controller
+               joint_state_controller"/> 
+  </group>
+
+  <group if="$(arg use_trajectory_controller)">
+    <!-- Effort Joint trajectory controller-->
+    <node name="mico_trajectory_controller" pkg="controller_manager" type="spawner" 
+      output="screen" ns="mico_control" 
+      args="effort_joint_trajectory_controller
+      effort_finger_trajectory_controller    
+      joint_state_controller"/>    
+  </group>
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen">    
+    <remap from="/joint_states" to="/mico/joint_states"/>    
+  </node>
+  
+<!--  <node name="command_robot_home_pose" pkg="kinova_control" type="move_robot.py"-->
+<!--        respawn="false" output="screen" args="$(arg kinova_robotType)">       -->
+<!--  </node>-->
+<!-- -->
+  <!-- once the joint_state is published, run the robot_state_publisher, the namespace has to be adapted --> 
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <!-- node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+  </node -->
+
+<!-- 
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+    <rosparam command="load" file="$(find summit_xl_control)/config/twist_mux.yaml" />
+    <remap from="cmd_vel_out" to="/summit_xl_control/cmd_vel" />
+  </node>
+-->
+</launch>
+
+ 

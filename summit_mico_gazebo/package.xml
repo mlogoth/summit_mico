@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>summit_mico_gazebo</name>
+  <version>1.1.1</version>
+  <description>
+		This package contains the required files for simulation in Gazebo.
+  </description>
+
+  <maintainer email="logothm@gmail.com">Michalis Logothetis</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <run_depend>ros_controllers</run_depend>
+  <run_depend>ros_control</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>summit_xl_pad</run_depend>  
+
+</package>

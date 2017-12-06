@@ -72,18 +72,9 @@
 	<!-- ARM KINOVA MICO2 -->
 	
 	<!-- Load Mico Arm -->
-<!--	<xacro:mico_arm parent="base_link" xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>-->
+	<xacro:mico_arm parent="base_link" xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>
 
-  <link name="root"/>
-  <joint name="connect_root_and_summit" type="fixed">
-    <child link="root" />
-    <parent link="base_link" />
-    <origin xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0" />    
-  </joint> 
 
-  <property name="robot_root" value="root" />
-
-  <xacro:m1n6s200  base_parent="${robot_root}" prefix="mico"/>
 	<!-- SENSORS -->
 	
 	
