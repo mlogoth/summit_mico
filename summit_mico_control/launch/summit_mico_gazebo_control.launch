@@ -15,31 +15,37 @@
 <!--                      ">-->
 <!--  </node>-->
 
-  <group unless="$(arg use_trajectory_controller)">
-  <!-- load the joint by joint position controllers -->  
-    <node name="mico_joints_controller" pkg="controller_manager" type="spawner" respawn="true"
-        output="screen" ns="mico_control" 
-       args="mico_control/joint_1_position_controller mico_control/joint_2_position_controller  
-               mico_control/joint_3_position_controller mico_control/joint_4_position_controller
-               mico_control/joint_5_position_controller mico_control/joint_6_position_controller 
-               mico_control/finger_2_position_controller mico_control/finger_1_position_controller 
-               mico_control/finger_3_position_controller
-               mico_control/joint_state_controller"/> 
-  </group>
-
   <group if="$(arg use_trajectory_controller)">
     <!-- Effort Joint trajectory controller-->
     <node name="mico_trajectory_controller" pkg="controller_manager" type="spawner" 
-      output="screen" ns="mico_control" 
+      output="screen" ns="mico" 
       args="effort_joint_trajectory_controller
       effort_finger_trajectory_controller    
-      joint_state_controller"/>    
+      joint_state_controller"/>
   </group>
+
+
+  <group unless="$(arg use_trajectory_controller)">
+  <!-- load the joint by joint position controllers -->  
+    <node name="mico_joints_controller" pkg="controller_manager" type="spawner" respawn="true"
+        output="screen" ns="mico" 
+       args="joint_1_position_controller joint_2_position_controller  
+             joint_3_position_controller joint_4_position_controller
+             joint_5_position_controller joint_6_position_controller 
+             finger_2_position_controller finger_1_position_controller 
+             joint_state_controller"/> 
+  </group>
+
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
         respawn="false" output="screen">    
     <remap from="/joint_states" to="/mico/joint_states"/>    
+  </node>
+  
+  <!-- Move Kinova to Home Position -->
+  <node name="command_mico_home_pose" pkg="summit_mico_control" type="mico_home.py"
+        respawn="false" output="screen">       
   </node>
   
 <!--  <node name="command_robot_home_pose" pkg="kinova_control" type="move_robot.py"-->
