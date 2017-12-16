@@ -8,17 +8,17 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
+	<xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
   
 	<!-- Import summit XL wheels -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+	<xacro:include filename="$(find summit_description)/urdf/wheels/omni_wheel.urdf.xacro" />
     
 	<!-- Import all available sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
 	<!-- Import Mico Arm -->
 <!--	<xacro:include filename="$(find mico_description)/urdf/mico_arm.urdf.xacro" />-->
-	<xacro:include filename="$(find kinova_description)/urdf/m1n6s200.xacro" />
+	<xacro:include filename="$(find mico_description)/urdf/mico2fingers.xacro" />
 	<!-- ***************** -->
 	<!-- Global parameters -->
 	<!-- ***************** -->
@@ -83,7 +83,7 @@
 
   <property name="robot_root" value="root" />
 
-  <xacro:m1n6s200  base_parent="${robot_root}" prefix="mico"/>
+  <xacro:mico2fingers  base_parent="${robot_root}" prefix="mico"/>
 	<!-- SENSORS -->
 	
 	

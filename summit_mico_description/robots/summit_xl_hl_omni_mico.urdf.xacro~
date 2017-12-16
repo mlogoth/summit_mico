@@ -8,17 +8,17 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
+	<xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
   
 	<!-- Import summit XL wheels -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+	<xacro:include filename="$(find summit_description)/urdf/wheels/omni_wheel.urdf.xacro" />
     
 	<!-- Import all available sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
 	<!-- Import Mico Arm -->
 <!--	<xacro:include filename="$(find mico_description)/urdf/mico_arm.urdf.xacro" />-->
-	<xacro:include filename="$(find kinova_description)/urdf/m1n6s200.xacro" />
+	<xacro:include filename="$(find mico_description)/urdf/mico2fingers.xacro" />
 	<!-- ***************** -->
 	<!-- Global parameters -->
 	<!-- ***************** -->
@@ -72,9 +72,18 @@
 	<!-- ARM KINOVA MICO2 -->
 	
 	<!-- Load Mico Arm -->
-	<xacro:mico_arm parent="base_link" xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>
+<!--	<xacro:mico_arm parent="base_link" xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>-->
 
+  <link name="root"/>
+  <joint name="connect_root_and_summit" type="fixed">
+    <child link="root" />
+    <parent link="base_link" />
+    <origin xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0" />    
+  </joint> 
 
+  <property name="robot_root" value="root" />
+
+  <xacro:mico2fingers  base_parent="${robot_root}" prefix="mico"/>
 	<!-- SENSORS -->
 	
 	

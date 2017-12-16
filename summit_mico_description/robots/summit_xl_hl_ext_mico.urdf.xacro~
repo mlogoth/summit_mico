@@ -21,7 +21,9 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
+<!--	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />-->
+	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_base.urdf.xacro" />
+  
   
 	<!-- Import summit XL wheels -->
 	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
@@ -60,8 +62,8 @@
 	<!-- Gazebo ros control pluggins -->
 	<xacro:ros_control/>
 	
-	<!-- Gazebo skid steering pluggins -->
-	<xacro:skid_steering broadcastOdomTF="1"/>
+	<!-- Gazebo skid steering pluggins
+	<xacro:skid_steering broadcastOdomTF="1"/> -->
   
   
 	<!-- WHEELS -->

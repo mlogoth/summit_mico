@@ -7,7 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
-        - /RobotModel1/Status1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 775
   - Class: rviz/Selection
@@ -90,17 +90,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        mico_large_ring_cover_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mico_large_ring_cover_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mico_large_ring_cover_3:
+        mico_end_effector:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -130,6 +120,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        mico_link_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         mico_link_base:
           Alpha: 1
           Show Axes: false
@@ -155,26 +150,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        mico_link_hand:
+        root:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        mico_small_ring_cover_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mico_small_ring_cover_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mico_small_ring_cover_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -182,19 +161,82 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: true
-      Marker Scale: 1
+        back_left_wheel:
+          Value: true
+        back_right_wheel:
+          Value: true
+        base_footprint:
+          Value: true
+        base_link:
+          Value: true
+        front_left_wheel:
+          Value: true
+        front_right_wheel:
+          Value: true
+        mico_end_effector:
+          Value: true
+        mico_link_1:
+          Value: true
+        mico_link_2:
+          Value: true
+        mico_link_3:
+          Value: true
+        mico_link_4:
+          Value: true
+        mico_link_5:
+          Value: true
+        mico_link_6:
+          Value: true
+        mico_link_base:
+          Value: true
+        mico_link_finger_1:
+          Value: true
+        mico_link_finger_2:
+          Value: true
+        mico_link_finger_tip_1:
+          Value: true
+        mico_link_finger_tip_2:
+          Value: true
+        root:
+          Value: true
+      Marker Scale: 0.35
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        base_footprint:
+          base_link:
+            back_left_wheel:
+              {}
+            back_right_wheel:
+              {}
+            front_left_wheel:
+              {}
+            front_right_wheel:
+              {}
+            root:
+              mico_link_base:
+                mico_link_1:
+                  mico_link_2:
+                    mico_link_3:
+                      mico_link_4:
+                        mico_link_5:
+                          mico_link_6:
+                            mico_end_effector:
+                              {}
+                            mico_link_finger_1:
+                              mico_link_finger_tip_1:
+                                {}
+                            mico_link_finger_2:
+                              mico_link_finger_tip_2:
+                                {}
       Update Interval: 0
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -219,7 +261,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.68348
+      Distance: 2.96222
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -231,10 +273,10 @@ Visualization Manager:
         Z: 0.0644606
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.400399
+      Pitch: 0.475399
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.19357
+      Yaw: 4.99356
     Saved: ~
 Window Geometry:
   Displays:
