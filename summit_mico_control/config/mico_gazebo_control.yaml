@@ -1,3 +1,7 @@
+# ---------------------------- #
+# JOINT TRAJECTORY CONTROLLERS #
+# ---------------------------- #
+
 effort_finger_trajectory_controller:
     constraints:
       goal_time: 1.0
@@ -86,6 +90,10 @@ effort_joint_trajectory_controller:
     - mico_joint_6
     type: effort_controllers/JointTrajectoryController
 
+# -------------------- #
+# POSITION CONTROLLERS #
+# -------------------- #
+
 finger_1_position_controller:
     joint: mico_joint_finger_1
     pid:
@@ -149,6 +157,75 @@ joint_6_position_controller:
       i: 0
       p: 500
     type: effort_controllers/JointPositionController
+
+
+# -------------------- #
+# VELOCITY CONTROLLERS #
+# -------------------- #
+
+finger_1_velocity_controller:
+    joint: mico_joint_finger_1
+    pid:
+      d: 0
+      i: 0
+      p: 10
+    type: effort_controllers/JointVelocityController
+
+finger_2_velocity_controller:
+    joint: mico_joint_finger_2
+    pid:
+      d: 0
+      i: 0
+      p: 10
+    type: effort_controllers/JointVelocityController
+
+joint_1_velocity_controller:
+    joint: mico_joint_1
+    pid:
+      d: 0
+      i: 0
+      p: 5000
+    type: effort_controllers/JointVelocityController
+
+joint_2_velocity_controller:
+    joint: mico_joint_2
+    pid:
+      d: 0
+      i: 0
+      p: 5000
+    type: effort_controllers/JointVelocityController
+
+joint_3_velocity_controller:
+    joint: mico_joint_3
+    pid:
+      d: 0
+      i: 0
+      p: 5000
+    type: effort_controllers/JointVelocityController
+
+joint_4_velocity_controller:
+    joint: mico_joint_4
+    pid:
+      d: 0
+      i: 0
+      p: 500
+    type: effort_controllers/JointVelocityController
+
+joint_5_velocity_controller:
+    joint: mico_joint_5
+    pid:
+      d: 0
+      i: 0
+      p: 200
+    type: effort_controllers/JointVelocityController
+
+joint_6_velocity_controller:
+    joint: mico_joint_6
+    pid:
+      d: 0
+      i: 0
+      p: 500
+    type: effort_controllers/JointVelocityController
 
 joint_state_controller:
     publish_rate: 50

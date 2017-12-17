@@ -1,0 +1,25 @@
+<package>
+  <name>summit_mico</name>
+  <version>1.0.10</version>
+  <description>URDF description and Gazebo Configuration files of the Summit XL HL + MICO2 2 Finger Mobile Manipulator.</description>
+
+
+  <license>BSD</license>
+
+  <url type="repository">https://github.com/mlogoth/summit_mico.git</url>
+  <url type="bugtracker">https://github.com/mlogoth/summit_mico/issues</url>
+
+
+  <maintainer email="logothm@gmail.com">Michalis Logothetis</maintainer>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>summit_xl_description</run_depend>
+  <run_depend>summit_xl_localization</run_depend>
+  <run_depend>summit_xl_navigation</run_depend>
+  <run_depend>summit_xl_pad</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
