@@ -64,5 +64,5 @@ summit_xl_control:
 
 joint_read_state_controller:
     type: joint_state_controller/JointStateController 
-    publish_rate: 100.0
+    publish_rate: 50.0
 

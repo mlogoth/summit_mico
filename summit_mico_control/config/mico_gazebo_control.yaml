@@ -15,12 +15,12 @@ effort_finger_trajectory_controller:
     gains:
       mico_joint_finger_1:
         d: 0
-        i: 0
+        i: 1
         i_clamp: 1
         p: 10
       mico_joint_finger_2:
         d: 0
-        i: 0
+        i: 1
         i_clamp: 1
         p: 10
     joints:
@@ -113,33 +113,33 @@ finger_2_position_controller:
 joint_1_position_controller:
     joint: mico_joint_1
     pid:
-      d: 0
-      i: 0
-      p: 5000
+      d: 5
+      i: 2
+      p: 500
     type: effort_controllers/JointPositionController
 
 joint_2_position_controller:
     joint: mico_joint_2
     pid:
-      d: 0
-      i: 0
-      p: 5000
+      d: 5
+      i: 2
+      p: 500
     type: effort_controllers/JointPositionController
 
 joint_3_position_controller:
     joint: mico_joint_3
     pid:
-      d: 0
-      i: 0
-      p: 5000
+      d: 5
+      i: 2
+      p: 100
     type: effort_controllers/JointPositionController
 
 joint_4_position_controller:
     joint: mico_joint_4
     pid:
       d: 0
-      i: 0
-      p: 500
+      i: 2
+      p: 100
     type: effort_controllers/JointPositionController
 
 joint_5_position_controller:
@@ -147,15 +147,15 @@ joint_5_position_controller:
     pid:
       d: 0
       i: 0
-      p: 200
+      p: 50
     type: effort_controllers/JointPositionController
 
 joint_6_position_controller:
     joint: mico_joint_6
     pid:
       d: 0
-      i: 0
-      p: 500
+      i: 2
+      p: 100
     type: effort_controllers/JointPositionController
 
 
@@ -226,6 +226,40 @@ joint_6_velocity_controller:
       i: 0
       p: 500
     type: effort_controllers/JointVelocityController
+
+
+
+
+# -------------------- #
+#   EFFORT CONTROLLERS #
+# -------------------- #
+
+joint_1_effort_controller:
+    joint: mico_joint_1
+    type: effort_controllers/JointEffortController
+
+joint_2_effort_controller:
+    joint: mico_joint_2
+    type: effort_controllers/JointEffortController
+
+joint_3_effort_controller:
+    joint: mico_joint_3
+    type: effort_controllers/JointEffortController
+
+joint_4_effort_controller:
+    joint: mico_joint_4
+    type: effort_controllers/JointEffortController
+
+joint_5_effort_controller:
+    joint: mico_joint_5
+    type: effort_controllers/JointEffortController
+
+joint_6_effort_controller:
+    joint: mico_joint_6
+    type: effort_controllers/JointEffortController
+
+
+
 
 joint_state_controller:
     publish_rate: 50

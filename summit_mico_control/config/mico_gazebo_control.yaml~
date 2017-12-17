@@ -227,6 +227,40 @@ joint_6_velocity_controller:
       p: 500
     type: effort_controllers/JointVelocityController
 
+
+
+
+# -------------------- #
+#   EFFORT CONTROLLERS #
+# -------------------- #
+
+joint_1_effort_controller:
+    joint: mico_joint_1
+    type: effort_controllers/JointEffortController
+
+joint_2_effort_controller:
+    joint: mico_joint_2
+    type: effort_controllers/JointEffortController
+
+joint_3_effort_controller:
+    joint: mico_joint_3
+    type: effort_controllers/JointEffortController
+
+joint_4_effort_controller:
+    joint: mico_joint_4
+    type: effort_controllers/JointEffortController
+
+joint_5_effort_controller:
+    joint: mico_joint_5
+    type: effort_controllers/JointEffortController
+
+joint_6_effort_controller:
+    joint: mico_joint_6
+    type: effort_controllers/JointEffortController
+
+
+
+
 joint_state_controller:
     publish_rate: 50
     type: joint_state_controller/JointStateController
