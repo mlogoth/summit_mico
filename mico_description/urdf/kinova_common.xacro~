@@ -25,7 +25,7 @@
             <visual>
                 <geometry>
                     <mesh
-                        filename="package://kinova_description/meshes/${link_mesh}.dae"/>
+                        filename="package://mico_description/meshes/${link_mesh}.dae"/>
                 </geometry>
                 <material name="carbon_fiber">
                     <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
@@ -37,15 +37,19 @@
 	           <visual>
                 <geometry>
                     <mesh
-                        filename="package://kinova_description/meshes/${ring_mesh}.STL"/>
-                </geometry>              
+                        filename="package://mico_description/meshes/${ring_mesh}.STL"/>
+                </geometry>
+                <material name="carbon_fiber">
+                    <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+                </material>
+                
              </visual>
 	    </xacro:if>
 
             <collision>
                 <geometry>
                     <mesh
-                        filename="package://kinova_description/meshes/${link_mesh}.dae"/>
+                        filename="package://mico_description/meshes/${link_mesh}.dae"/>
                 </geometry>
             </collision>
 						<xacro:kinova_inertial mesh_no="${mesh_no}"/>	

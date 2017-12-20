@@ -1,0 +1,26 @@
+controller_list:
+  - name: fake_arm_controller
+    joints:
+      - mico_joint_1
+      - mico_joint_2
+      - mico_joint_3
+      - mico_joint_4
+      - mico_joint_5
+      - mico_joint_6
+  - name: fake_summit_mico_controller
+    joints:
+      - virtual_joint
+      - mico_joint_1
+      - mico_joint_2
+      - mico_joint_3
+      - mico_joint_4
+      - mico_joint_5
+      - mico_joint_6
+      - joint_back_left_wheel
+      - joint_back_right_wheel
+      - joint_front_left_wheel
+      - joint_front_right_wheel
+  - name: fake_gripper_controller
+    joints:
+      - mico_joint_finger_1
+      - mico_joint_finger_2

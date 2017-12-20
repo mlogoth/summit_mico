@@ -38,7 +38,7 @@
                 <geometry>
                     <mesh
                         filename="package://mico_description/meshes/${ring_mesh}.STL"/>
-                </geometry>              
+                </geometry>
              </visual>
 	    </xacro:if>
 

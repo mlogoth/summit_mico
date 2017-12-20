@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: summit_mico_description
+    relative_path: robots/summit_mico_diff.urdf
+  SRDF:
+    relative_path: config/summit_xl_mico.srdf
+  CONFIG:
+    author_name: Michalis Logothetis
+    author_email: logothm@gmail.com
+    generated_timestamp: 1513547609
