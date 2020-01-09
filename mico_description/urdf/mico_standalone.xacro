@@ -21,23 +21,38 @@
 
   <link name="root">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <box size = "0 0 0"/>
+        <box size = "0.01 0.01 0.01"/>
       </geometry>
     <!--<material name="Black" /> -->
     </visual>
 
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
-        <box size = "0 0 0"/> 
+        <box size = "0.01 0.01 0.01"/> 
       </geometry>
     </collision>     
   </link>
 
   <!-- for gazebo -->
-  <link name="world"/>
+  <link name="world">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <box size = "0.01 0.01 0.01"/>
+      </geometry>
+    <!--<material name="Black" /> -->
+    </visual>
+
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <box size = "0.01 0.01 0.01"/> 
+      </geometry>
+    </collision>
+  </link>     
   
   <joint name="connect_root_and_world" type="fixed">
     <child link="root" />
