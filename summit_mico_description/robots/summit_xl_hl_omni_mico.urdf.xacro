@@ -94,13 +94,66 @@
     <child link="root" />
     <parent link="base_link" />
 	<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->   
-	<origin xyz="0.19 0.0 0.23" rpy="0 ${0.0*PI/180} 0" />    
+	<origin xyz="0.22 0.0 0.30" rpy="0 ${0.0*PI/180} 0" />    
   </joint> 
 
   <property name="robot_root" value="root" />
 
   <xacro:mico2fingers  base_parent="${robot_root}" prefix="mico"/>
-	<!-- SENSORS -->
+	
+ 
+ <!-- Collision Boxes for Modified Platform -->
+
+ <link name="mini_pc">
+	<visual>
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+		<geometry>
+		  <box size = "0.40 0.37 0.14"/>
+		</geometry>
+		<material name="Black" /> 
+  	</visual>
+
+  <collision>
+	<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+	<geometry>
+	  <box size = "0.40 0.37 0.14"/> 
+	</geometry>
+  </collision>
+</link>
+
+<link name="rgbd_camera">
+	<visual>
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+		<geometry>
+		  <box size = "0.10 0.26 0.60"/>
+		</geometry>
+		<material name="Black" /> 
+  	</visual>
+
+  <collision>
+	<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+	<geometry>
+	  <box size = "0.10 0.26 0.60"/> 
+	</geometry>
+  </collision>
+</link>
+
+<joint name="mini_pc_and_summit" type="fixed">
+    <child link="mini_pc" />
+    <parent link="base_link" />
+	<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->   
+	<origin xyz="-0.1 0.0 0.30" rpy="0 ${0.0*PI/180} 0" />    
+</joint>
+
+<joint name="rgbd_and_summit" type="fixed">
+    <child link="rgbd_camera" />
+    <parent link="base_link" />
+	<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->   
+	<origin xyz="-0.3 0.0 0.60" rpy="0 ${0.0*PI/180} 0" />    
+</joint> 
+ 
+ 
+  <!-- SENSORS -->
 	
 	
   <!-- Hokuyo laser sensors can be parametized with min_angle and max_angle e.g: -->

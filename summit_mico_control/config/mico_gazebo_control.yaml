@@ -1,6 +1,115 @@
 # ---------------------------- #
 # JOINT TRAJECTORY CONTROLLERS #
 # ---------------------------- #
+# gazebo_ros_control:   
+#   pid_gains:
+#     mico_joint_1:
+#       p: 100.0
+#       i: 0.01 
+#       d: 10.0
+#     mico_joint_2:
+#       p: 10.0
+#       i: 0.01 
+#       d: 10.0
+#     mico_joint_3:
+#       p: 10.0
+#       i: 0.01 
+#       d: 10.0
+
+mico:
+    velocity_finger_trajectory_controller:
+        constraints:
+          goal_time: 1.0
+          mico_joint_finger_1:
+            goal: 0.02
+            trajectory: 0.05
+          mico_joint_finger_2:
+            goal: 0.02
+            trajectory: 0.05
+          stopped_velocity_tolerance: 0.02
+        gains:
+          mico_joint_finger_1:
+            d: 0
+            i: 0
+            i_clamp: 1
+            p: 10
+          mico_joint_finger_2:
+            d: 0
+            i: 0
+            i_clamp: 1
+            p: 10
+        joints:
+          - mico_joint_finger_1
+          - mico_joint_finger_2
+        type: velocity_controllers/JointTrajectoryController
+    
+    velocity_joint_trajectory_controller:
+        constraints:
+          goal_time: 1.0
+          mico_joint_1:
+            goal: 0.02
+            trajectory: 0.05
+          mico_joint_2:
+            goal: 0.02
+            trajectory: 0.05
+          mico_joint_3:
+            goal: 0.02
+            trajectory: 0.05
+          mico_joint_4:
+            goal: 0.02
+            trajectory: 0.05
+          mico_joint_5:
+            goal: 0.02
+            trajectory: 0.05
+          mico_joint_6:
+            goal: 0.02
+            trajectory: 0.05
+          stopped_velocity_tolerance: 0.02
+        gains:
+          mico_joint_1:
+            d: 5
+            i: 10
+            i_clamp: 10
+            p: 500
+          mico_joint_2:
+            d: 5
+            i: 10
+            i_clamp: 10
+            p: 500
+          mico_joint_3:
+            d: 5
+            i: 10
+            i_clamp: 5
+            p: 500
+          mico_joint_4:
+            d: 5
+            i: 10
+            i_clamp: 5
+            p: 300
+          mico_joint_5:
+            d: 5
+            i: 10
+            i_clamp: 5
+            p: 300
+          mico_joint_6:
+            d: 5
+            i: 10
+            i_clamp: 5
+            p: 300
+        joints:
+        - mico_joint_1
+        - mico_joint_2
+        - mico_joint_3
+        - mico_joint_4
+        - mico_joint_5
+        - mico_joint_6
+        type: velocity_controllers/JointTrajectoryController
+    
+    joint_state_controller:
+      publish_rate: 50
+      type: joint_state_controller/JointStateController
+
+
 
 effort_finger_trajectory_controller:
     constraints:
@@ -15,14 +124,14 @@ effort_finger_trajectory_controller:
     gains:
       mico_joint_finger_1:
         d: 0
-        i: 1
+        i: 2
         i_clamp: 1
-        p: 10
+        p: 20
       mico_joint_finger_2:
         d: 0
-        i: 1
+        i: 2
         i_clamp: 1
-        p: 10
+        p: 20
     joints:
     - mico_joint_finger_1
     - mico_joint_finger_2
@@ -100,7 +209,7 @@ finger_1_position_controller:
       d: 0
       i: 0
       p: 10
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 finger_2_position_controller:
     joint: mico_joint_finger_2
@@ -108,7 +217,7 @@ finger_2_position_controller:
       d: 0
       i: 0
       p: 10
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 joint_1_position_controller:
     joint: mico_joint_1
@@ -116,7 +225,7 @@ joint_1_position_controller:
       d: 5
       i: 2
       p: 500
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 joint_2_position_controller:
     joint: mico_joint_2
@@ -124,7 +233,7 @@ joint_2_position_controller:
       d: 5
       i: 2
       p: 500
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 joint_3_position_controller:
     joint: mico_joint_3
@@ -132,7 +241,7 @@ joint_3_position_controller:
       d: 5
       i: 2
       p: 100
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 joint_4_position_controller:
     joint: mico_joint_4
@@ -140,7 +249,7 @@ joint_4_position_controller:
       d: 0
       i: 2
       p: 100
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 joint_5_position_controller:
     joint: mico_joint_5
@@ -148,7 +257,7 @@ joint_5_position_controller:
       d: 0
       i: 0
       p: 50
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 joint_6_position_controller:
     joint: mico_joint_6
@@ -156,7 +265,7 @@ joint_6_position_controller:
       d: 0
       i: 2
       p: 100
-    type: effort_controllers/JointPositionController
+    type: velocity_controllers/JointPositionController
 
 
 # -------------------- #

@@ -9,25 +9,25 @@
   <rosparam file="$(find summit_mico_control)/config/summit_gazebo_control.yaml" command="load"/>
 
   <!-- load the controllers -->
-<!--  <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"-->
-<!--    output="screen" args="-->
-<!--                     timeout 120-->
-<!--                      summit_xl_control-->
-<!--                      joint_read_state_controller -->
-<!--                      ">-->
-<!--  </node>-->
+  <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="summit_xl" args="
+    --timeout 120
+      robotnik_base_control
+      joint_read_state_controller"/>
 
   <group if="$(arg use_trajectory_controller)">
     <!-- Effort Joint trajectory controller-->
     <node name="mico_trajectory_controller" pkg="controller_manager" type="spawner" 
-      output="screen"  
+      output="screen"
+      ns="mico"  
       args="
       --timeout 120
-      summit_xl_control
-      effort_joint_trajectory_controller
-      effort_finger_trajectory_controller    
+      velocity_joint_trajectory_controller
+      velocity_finger_trajectory_controller  
       joint_state_controller"/>
   </group>
+
+
 
 
 
