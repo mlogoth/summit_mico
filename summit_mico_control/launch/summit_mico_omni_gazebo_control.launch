@@ -2,6 +2,14 @@
 <launch>
   
   <arg name="use_trajectory_controller" default="true"/>
+  <arg name="moveit" default="true"/>
+    <!-- By default, we do not start a database (it can be large) -->
+    <arg name="db" default="false" />
+    <!-- Allow user to specify database location -->
+    <arg name="db_path" default="$(find summit_mico_moveit_config)/default_warehouse_mongo_db" />
+  
+    <!-- By default, we are not in debug mode -->
+    <arg name="debug" default="false" />
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <!-- MICO2 2Finger Arm Controllers -->
   <rosparam file="$(find summit_mico_control)/config/mico_gazebo_control.yaml" command="load"/>
@@ -12,14 +20,12 @@
   <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" ns="summit_xl" args="
     --timeout 120
-      robotnik_base_control
-      joint_read_state_controller"/>
+      robotnik_base_control"/>
 
   <group if="$(arg use_trajectory_controller)">
     <!-- Effort Joint trajectory controller-->
     <node name="mico_trajectory_controller" pkg="controller_manager" type="spawner" 
-      output="screen"
-      ns="mico"  
+      output="screen"  
       args="
       --timeout 120
       velocity_joint_trajectory_controller
@@ -28,7 +34,24 @@
   </group>
 
 
+  <group if="$(arg moveit)">
+    <!-- MoveIt Launch Files -->
+    <!-- <remap from="mico/joint_states" to="/joint_states"/> -->
+    <include file="$(find summit_mico_moveit_config)/launch/move_group.launch">
+    </include>
+      <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  <include file="$(find summit_mico_moveit_config)/launch/moveit_rviz.launch">
+    <!-- <arg name="rviz_config" value="$(find summit_mico_moveit_config)/launch/moveit.rviz"/> -->
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="config" value="true"/>
+  </include>
 
+  <!-- If database loading was enabled, start mongodb as well -->
+  <include file="$(find summit_mico_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)">
+    <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
+  </include>
+
+  </group>
 
 
 

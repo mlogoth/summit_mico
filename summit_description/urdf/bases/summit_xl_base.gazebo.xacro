@@ -41,8 +41,8 @@
   <xacro:macro name="omni_steering">
 		<gazebo>
 	    <plugin name="omni_steering" filename="libgazebo_ros_planar_move.so">
-		  <commandTopic>robotnik_base_control/cmd_vel</commandTopic>  
-		  <odometryTopic>robotnik_base_control/odom</odometryTopic>
+		  <commandTopic>/summit_xl/robotnik_base_control/cmd_vel</commandTopic>  
+		  <odometryTopic>/summit_xl/robotnik_base_control/odom</odometryTopic>
 	      <odometryFrame>odom</odometryFrame>
 	      <odometryRate>50.0</odometryRate>
 	      <robotBaseFrame>base_footprint</robotBaseFrame>
