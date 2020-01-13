@@ -100,8 +100,8 @@
   <property name="robot_root" value="root" />
 
   <xacro:mico2fingers  base_parent="${robot_root}" prefix="mico"/>
-	
- 
+
+
  <!-- Collision Boxes for Modified Platform -->
 
  <link name="mini_pc">

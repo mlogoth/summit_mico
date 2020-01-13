@@ -1,15 +1,7 @@
 controller_list:
   - name: fake_arm_controller
     joints:
-      - mico_joint_1
-      - mico_joint_2
-      - mico_joint_3
-      - mico_joint_4
-      - mico_joint_5
-      - mico_joint_6
-  - name: fake_summit_mico_controller
-    joints:
-      - virtual_joint
+      - summit_virtual_joint
       - mico_joint_1
       - mico_joint_2
       - mico_joint_3
