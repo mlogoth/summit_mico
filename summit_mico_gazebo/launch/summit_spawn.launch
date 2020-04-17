@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="kinematic_mode" default="diff"/>
+  <arg name="enable_camera" default="true"/>
+
+  <arg name="robot_id" default="summit_a"/>
+
+  <arg name="x" default="2.0"/>
+  <arg name="y" default="2.0"/>
+  <arg name="z" default="0.0"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="0.0"/>
+
+  <arg name="robot_pose" value="-x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+
+  <group if="$(eval arg('robot_id') =='')">
+    <arg name="prefix" value=""/>
+    <!-- Load the URDF into the ROS Parameter Server -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find summit_description)/robots/summit_xl_hl_csl.urdf.xacro' prefix:=$(arg prefix) mode:=$(arg kinematic_mode) camera:=$(arg enable_camera)" />
+
+    <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model summit_mico -param robot_description $(arg robot_pose)"/>
+
+
+    <!-- Broadcast The initial Position -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_odom" args="$(arg x) $(arg y) $(arg z) $(arg roll) $(arg pitch) $(arg yaw) world odom 1000" /> -->
+
+    <!-- Summit XL HL Base Controllers -->
+    <rosparam file="$(find summit_mico_control)/config/summit_gazebo_control.yaml" command="load" subst_value="true"/>
+
+    <group if="$(eval arg('kinematic_mode') =='omni')">
+      <!-- load the controllers -->
+      <node name="wheel_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+      --timeout 120
+      joint_read_state_controller"/>
+    </group>
+
+    <group if="$(eval arg('kinematic_mode') =='skid')">
+      <!-- load the controllers -->
+      <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+      --timeout 120
+      joint_read_state_controller"/>
+    </group>
+
+
+    <group if="$(eval arg('kinematic_mode') =='diff')">
+      <!-- load the controllers -->
+      <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+      --timeout 120
+      joint_read_state_controller"/>
+    </group>
+
+    <!-- Robot state publisher -->
+    <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+      <param name="publish_frequency" type="double" value="100.0"/>
+    </node>
+  </group>
+
+
+
+  <group unless="$(eval arg('robot_id') =='')">
+    <arg name="prefix" value="$(arg robot_id)_"/>
+    <group ns="$(arg robot_id)">
+
+
+      <!-- Load the URDF into the ROS Parameter Server -->
+      <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find summit_description)/robots/summit_xl_hl_csl.urdf.xacro' prefix:=$(arg prefix) mode:=$(arg kinematic_mode) camera:=$(arg enable_camera)" />
+
+      <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model $(arg prefix) -param robot_description $(arg robot_pose)"/>
+
+
+      <!-- Broadcast The initial Position -->
+      <!-- <node pkg="tf" type="static_transform_publisher" name="$(arg prefix)world_to_odom" args="$(arg x) $(arg y) $(arg z) $(arg roll) $(arg pitch) $(arg yaw) world $(arg prefix)odom 100" /> -->
+
+
+      <!-- Summit XL HL Base Controllers -->
+      <rosparam file="$(find summit_mico_control)/config/summit_gazebo_control.yaml" command="load" subst_value="true"/>
+
+
+      <group if="$(eval arg('kinematic_mode') =='omni')">
+        <node name="wheel_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+      --timeout 120
+      joint_read_state_controller"/>
+      </group>
+
+      <group if="$(eval arg('kinematic_mode') =='skid')">
+        <!-- load the controllers -->
+        <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+      --timeout 120
+      joint_read_state_controller"/>
+
+      </group>
+
+
+      <group if="$(eval arg('kinematic_mode') =='diff')">
+        <!-- load the controllers -->
+        <node name="summit_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+      --timeout 120
+      joint_read_state_controller"/>
+      </group>
+
+      <!-- Robot state publisher -->
+      <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="100.0"/>
+      </node>
+    </group>
+  </group>
+
+</launch>
+

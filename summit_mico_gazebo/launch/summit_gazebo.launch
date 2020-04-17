@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="use_trajectory_controller" default="true"/>
+
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find summit_mico_gazebo)/worlds/summit_mico_empty.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <include file="$(find summit_mico_gazebo)/launch/summit_spawn.launch">
+    <arg name="kinematic_mode" value="diff"/>
+    <arg name="enable_camera" value="true"/>
+    <arg name="robot_id" value="summit_a"/>
+    <arg name="x" value="2.0"/>
+    <arg name="y" value="2.0"/>
+    <arg name="z" value="0.0"/>
+    <arg name="roll" value="0.0"/>
+    <arg name="pitch" value="0.0"/>
+    <arg name="yaw" value="0.0"/>
+  </include>
+
+  <include file="$(find summit_mico_gazebo)/launch/summit_spawn.launch">
+    <arg name="kinematic_mode" value="omni"/>
+    <arg name="enable_camera" value="true"/>
+    <arg name="robot_id" value="summit_b"/>
+    <arg name="x" value="2.0"/>
+    <arg name="y" value="-2.0"/>
+    <arg name="z" value="0.0"/>
+    <arg name="roll" value="0.0"/>
+    <arg name="pitch" value="0.0"/>
+    <arg name="yaw" value="0.0"/>
+  </include>
+
+
+
+</launch>
+
