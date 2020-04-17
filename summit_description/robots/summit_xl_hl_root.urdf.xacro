@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<robot name="summit_xl" 
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <xacro:macro name="summit_xl_robot" params="prefix *origin kinematic_model:='omni' kinect:=true mini_pc:=true">
+
+
+        <!-- ***************** -->
+        <!-- Imported elements -->
+        <!-- ***************** -->
+
+        <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+        <!-- Import summit XL base elements -->
+        <xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
+        <!-- Import summit XL wheels -->
+        <xacro:include filename="$(find summit_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
+        <!-- Import summit XL wheels -->
+        <xacro:include filename="$(find summit_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+        <!-- Import all available sensors -->
+        <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+
+
+        <!-- ***************** -->
+        <!-- Global parameters -->
+        <!-- ***************** -->
+
+        <xacro:property name="PI" value="3.1415926535897931"/>
+
+        <!-- Wheel parameters -->
+        <xacro:property name="wheel_offset_x" value="0.229" />
+        <!-- x,y,z in translation from base_link to the center of the wheel -->
+        <xacro:property name="wheel_offset_y" value="0.235" />
+        <xacro:property name="wheel_offset_z" value="0.0" />
+
+        <!-- Flag to select the high or low quality model -->
+        <xacro:property name="hq" value="true" />
+
+
+        <!-- *************** -->
+        <!-- Robots Elements -->
+        <!-- *************** -->
+
+        <!-- <joint name="${prefix}fixed" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="world"/>
+            <child link="${prefix}odom"/>
+        </joint> -->
+<!--         
+        <link name="${prefix}odom">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0 0 0.0"/>
+                <mass value="0.5"/>
+                <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+            </inertial>
+        </link> -->
+        <!-- <link name="world"/>  -->
+
+        <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+        <!-- Summit XL base -->
+        <xacro:summit_xl_hl_base prefix="${prefix}" publish_bf="true" hq="${hq}" />
+
+
+        <!-- WHEELS -->
+
+        <xacro:if value="${kinematic_model == 'omni'}">
+
+            <!-- OMNI WHEELS -->
+            <xacro:omni_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:omni_wheel>
+            <xacro:omni_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:omni_wheel>
+            <xacro:omni_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:omni_wheel>
+            <xacro:omni_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:omni_wheel>
+        </xacro:if>
+
+
+        <xacro:unless value="${kinematic_model == 'omni'}">
+            <!-- RUBBER WHEELS MIMIC-->
+            <xacro:rubber_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="${hq}" >
+                <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+            <xacro:rubber_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="${hq}" >
+                <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+            <xacro:rubber_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="true" hq="${hq}" >
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+            <xacro:rubber_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="false" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+        </xacro:unless>
+
+
+        <!-- SENSORS -->
+
+        <!-- IMU Sensor -->
+        <xacro:sensor_imu prefix="${prefix}imu" parent="${prefix}base_link">
+            <origin xyz="-0.18 0.0 0.170" rpy="0 0 0"/>
+        </xacro:sensor_imu>
+
+
+        <!-- Kinect Sensor -->
+        <xacro:if value="${kinect}">
+
+            <!-- Aluminium Channel 1 -->
+            <link name="${prefix}alluminium_channel_link">
+                <visual>
+                    <origin rpy="0.0 0.0 0.0" xyz="0 0 0.0"/>
+                    <geometry>
+                        <mesh filename="package://summit_description/meshes/aluminium_channel/model.stl" scale="0.02 0.02 0.02"/>
+                    </geometry>
+                    <material name="">
+                        <color rgba="0.34 0.35 0.36 1.0"/>
+                    </material>
+                </visual>
+                <collision>
+                    <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+                    <geometry>
+                        <mesh filename="package://summit_description/meshes/aluminium_channel/model.stl" scale="0.02 0.02 0.02"/>
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+                    <mass value="1"/>
+                    <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+                </inertial>
+            </link>
+
+            <joint name="${prefix}connect_alchannel1_and_summit" type="fixed">
+                <child link="${prefix}alluminium_channel_link" />
+                <parent link="${prefix}base_link" />
+                <origin xyz="-0.3 -0.05 0.27" rpy="${180.0*PI/180} ${-90.0*PI/180} ${0.0*PI/180}" />
+            </joint>
+
+            <!-- Aluminium Channel 2 -->
+            <link name="${prefix}alluminium_channel_link2">
+                <visual>
+                    <origin rpy="0.0 0.0 0.0" xyz="0 0 0.0"/>
+                    <geometry>
+                        <mesh filename="package://summit_description/meshes/aluminium_channel/model.stl" scale="0.02 0.02 0.02"/>
+                    </geometry>
+                    <material name="">
+                        <color rgba="0.34 0.35 0.36 1.0"/>
+                    </material>
+                </visual>
+                <collision>
+                    <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+                    <geometry>
+                        <mesh filename="package://summit_description/meshes/aluminium_channel/model.stl" scale="0.02 0.02 0.02"/>
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+                    <mass value="1"/>
+                    <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+                </inertial>
+            </link>
+
+            <joint name="${prefix}connect_alchannel2_and_summit" type="fixed">
+                <child link="${prefix}alluminium_channel_link2" />
+                <parent link="${prefix}base_link" />
+                <origin xyz="-0.3 0.06 0.27" rpy="${180.0*PI/180} ${-90.0*PI/180} ${0.0*PI/180}" />
+            </joint>
+
+            <!-- Add Sensor -->
+            <xacro:sensor_kinectv2 prefix="${prefix}kinect2" parent="${prefix}base_link">
+                <origin xyz="-0.26 -0.03 0.58" rpy="0 ${7.0*PI/180} 0"/>
+            </xacro:sensor_kinectv2>
+
+        </xacro:if>
+
+
+        <!-- Mini PC Case for Visualization and collision -->
+        <xacro:if value="${mini_pc}">
+            <!-- Mini PC -->
+            <link name="${prefix}mini_pc_link">
+                <origin rpy="0.0 -${PI/2.0} 0.0" xyz="0 0 0.0"/>
+                <visual>
+                    <origin rpy="0.0 -${PI/2.0} 0.0" xyz="0 0 0.0"/>
+                    <geometry>
+                        <mesh filename="package://summit_description/meshes/mini_pc/miniPC.stl" scale="0.02 0.02 0.02"/>
+                    </geometry>
+                    <material name="">
+                        <color rgba="0.34 0.35 0.36 1.0"/>
+                    </material>
+                </visual>
+                <collision>
+                    <!-- <origin rpy="0.0 -${PI/2.0} 0.0" xyz="0 0 0.0"/> -->
+                    <geometry>
+                        <!-- <mesh filename="package://summit_description/meshes/mini_pc/miniPC.stl" scale="0.015 0.015 0.015"/> -->
+                        <box size="0.35 0.27 0.12"/>
+                    </geometry>
+                </collision>
+                <inertial>
+                    <!-- <origin rpy="0.0 -${PI/2.0} 0.0" xyz="0 0 0.0"/> -->
+                    <mass value="5"/>
+                    <inertia ixx="5" ixy="0.0" ixz="0.0" iyy="5" iyz="0.0" izz="5"/>
+                </inertial>
+            </link>
+
+            <joint name="${prefix}connect_minipc_and_summit" type="fixed">
+                <child link="${prefix}mini_pc_link" />
+                <parent link="${prefix}base_link" />
+                <origin xyz="-0.1 0 0.35" rpy="0 ${0*PI/180} 0" />
+            </joint>
+        </xacro:if>
+
+
+
+
+        <!-- Gazebo ros control pluggins -->
+        <xacro:if value="${kinematic_model == 'omni'}">
+            <xacro:omni_steering prefix="${prefix}" publish_tf="false"/>
+        </xacro:if>
+
+        <xacro:if value="${kinematic_model == 'skid'}">
+            <xacro:skid_steering prefix="${prefix}" publish_tf="false"/>
+        </xacro:if>
+
+        <xacro:if value="${kinematic_model == 'diff'}">
+            <xacro:skid_steering prefix="${prefix}" publish_tf="false"/>
+        </xacro:if>
+
+
+        <xacro:ros_control/>
+
+    </xacro:macro>
+</robot>
+

@@ -1,18 +1,19 @@
 <?xml version="1.0"?>
-<robot name="summit_xl_hl_mico" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+<robot name="summit_xl_hl_mico" 
+	xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 	<!-- ***************** -->
 	<!-- Imported elements -->
 	<!-- ***************** -->
-	
+
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
 	<xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
-  
+
 	<!-- Import summit XL wheels -->
 	<xacro:include filename="$(find summit_description)/urdf/wheels/omni_wheel.urdf.xacro" />
-    
+
 	<!-- Import all available sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
@@ -21,183 +22,183 @@
 	<!-- ***************** -->
 	<!-- Global parameters -->
 	<!-- ***************** -->
-  
+
 	<xacro:property name="PI" value="3.1415926535897931"/>
-  
+
 	<!-- Wheel parameters -->
-	<xacro:property name="wheel_offset_x" value="0.229" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
-	<xacro:property name="wheel_offset_y" value="0.234" />    
+	<xacro:property name="wheel_offset_x" value="0.229" />
+	<!-- x,y,z in translation from base_link to the center of the wheel -->
+	<xacro:property name="wheel_offset_y" value="0.234" />
 	<xacro:property name="wheel_offset_z" value="0.0" />
 
 	<!-- Flag to select the high or low quality model -->
 	<xacro:property name="hq" value="true" />
-	
-	
+
+
 	<!-- *************** -->
 	<!-- Robots Elements -->
 	<!-- *************** -->
 
 	<!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
-	
-	<!-- Summit XL HL base -->
-  <xacro:summit_xl_hl_base name="summit_xl" publish_bf="true" hq="${hq}"/>
-  
-  <!-- Gazebo ros control pluggins -->
-  <xacro:ros_control/>
-  
-  <!-- Gazebo omni steering plugin -->
-	<xacro:omni_steering/>
-  
-    
-	<!-- WHEELS -->
 
+	<!-- Summit XL HL base -->
+	<xacro:summit_xl_hl_base name="summit_xl" publish_bf="true" hq="${hq}"/>
+
+	<!-- Gazebo ros control pluggins -->
+	<xacro:ros_control/>
+
+	<!-- Gazebo omni steering plugin -->
+	<xacro:omni_steering/>
+
+
+	<!-- WHEELS -->
 	<xacro:omni_wheel prefix="front_right" parent="base_link" reflect="false" hq="true">
 		<origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
 	</xacro:omni_wheel>
-  
+
 	<xacro:omni_wheel prefix="front_left" parent="base_link" reflect="true" hq="true">
 		<origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
 	</xacro:omni_wheel>
-  
+
 	<xacro:omni_wheel prefix="back_left" parent="base_link" reflect="false" hq="true">
 		<origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
 	</xacro:omni_wheel>
-  
+
 	<xacro:omni_wheel prefix="back_right" parent="base_link" reflect="true" hq="true">
 		<origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
 	</xacro:omni_wheel>
 
 
 	<!-- ARM KINOVA MICO2 -->
-	
+
 	<!-- Load Mico Arm -->
-<!--	<xacro:mico_arm parent="base_link" xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>-->
+	<!--	<xacro:mico_arm parent="base_link" xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>-->
 
-  <link name="root">
-      <visual>
-          <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-          <geometry>
-            <box size = "0.01 0.01 0.01"/>
-          </geometry>
-    <!--<material name="Black" /> -->
-    </visual>
+	<link name="root">
+		<visual>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<box size = "0.01 0.01 0.01"/>
+			</geometry>
+			<!--<material name="Black" /> -->
+		</visual>
 
-    <collision>
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-      <geometry>
-        <box size = "0.01 0.01 0.01"/> 
-      </geometry>
-    </collision>
-  </link>
-  
-  <joint name="connect_root_and_summit" type="fixed">
-    <child link="root" />
-    <parent link="base_link" />
-	<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->   
-	<origin xyz="0.22 0.0 0.30" rpy="0 ${0.0*PI/180} 0" />    
-  </joint> 
+		<collision>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<box size = "0.01 0.01 0.01"/>
+			</geometry>
+		</collision>
+	</link>
 
-  <property name="robot_root" value="root" />
+	<joint name="connect_root_and_summit" type="fixed">
+		<child link="root" />
+		<parent link="base_link" />
+		<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->
+		<origin xyz="0.22 0.0 0.30" rpy="0 ${0.0*PI/180} 0" />
+	</joint>
 
-  <xacro:mico2fingers  base_parent="${robot_root}" prefix="mico"/>
+	<property name="robot_root" value="root" />
+
+	<xacro:mico2fingers base_parent="${robot_root}" prefix="mico"/>
 
 
- <!-- Collision Boxes for Modified Platform -->
+	<!-- Collision Boxes for Modified Platform -->
 
- <link name="mini_pc">
-	<visual>
-		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-		<geometry>
-		  <box size = "0.40 0.37 0.14"/>
-		</geometry>
-		<material name="Black" /> 
-  	</visual>
+	<link name="mini_pc">
+		<visual>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<box size = "0.40 0.37 0.14"/>
+			</geometry>
+			<material name="Black" />
+		</visual>
 
-  <collision>
-	<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-	<geometry>
-	  <box size = "0.40 0.37 0.14"/> 
-	</geometry>
-  </collision>
-</link>
+		<collision>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<box size = "0.40 0.37 0.14"/>
+			</geometry>
+		</collision>
+	</link>
 
-<link name="rgbd_camera">
-	<visual>
-		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-		<geometry>
-		  <box size = "0.10 0.26 0.60"/>
-		</geometry>
-		<material name="Black" /> 
-  	</visual>
+	<link name="rgbd_camera">
+		<visual>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<box size = "0.10 0.26 0.60"/>
+			</geometry>
+			<material name="Black" />
+		</visual>
 
-  <collision>
-	<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-	<geometry>
-	  <box size = "0.10 0.26 0.60"/> 
-	</geometry>
-  </collision>
-</link>
+		<collision>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<box size = "0.10 0.26 0.60"/>
+			</geometry>
+		</collision>
+	</link>
 
-<joint name="mini_pc_and_summit" type="fixed">
-    <child link="mini_pc" />
-    <parent link="base_link" />
-	<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->   
-	<origin xyz="-0.1 0.0 0.30" rpy="0 ${0.0*PI/180} 0" />    
-</joint>
+	<joint name="mini_pc_and_summit" type="fixed">
+		<child link="mini_pc" />
+		<parent link="base_link" />
+		<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->
+		<origin xyz="-0.1 0.0 0.30" rpy="0 ${0.0*PI/180} 0" />
+	</joint>
 
-<joint name="rgbd_and_summit" type="fixed">
-    <child link="rgbd_camera" />
-    <parent link="base_link" />
-	<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->   
-	<origin xyz="-0.3 0.0 0.60" rpy="0 ${0.0*PI/180} 0" />    
-</joint> 
- 
- 
-  <!-- SENSORS -->
-	
-	
-  <!-- Hokuyo laser sensors can be parametized with min_angle and max_angle e.g: -->
-  <!--xacro:sensor_hokuyo_utm30lx name="hokuyo_base" parent="base_link" min_angle="2.35" max_angle="-2.35"-->
-  <!-- 
+	<joint name="rgbd_and_summit" type="fixed">
+		<child link="rgbd_camera" />
+		<parent link="base_link" />
+		<!--<origin xyz="0.19 0.0 0.17" rpy="0 ${15*PI/180} 0" />-->
+		<origin xyz="-0.3 0.0 0.60" rpy="0 ${0.0*PI/180} 0" />
+	</joint>
+
+
+	<!-- SENSORS -->
+
+
+	<!-- Hokuyo laser sensors can be parametized with min_angle and max_angle e.g: -->
+	<!--xacro:sensor_hokuyo_utm30lx name="hokuyo_base" parent="base_link" min_angle="2.35" max_angle="-2.35"-->
+	<!-- 
 	<xacro:sensor_hokuyo_utm30lx prefix="hokuyo_base" parent="base_link">
 		<origin xyz="0.0 0.0 0.33" rpy="0 0 0"/>
 	</xacro:sensor_hokuyo_utm30lx>
   -->
-<!--
+	<!--
 	<xacro:sensor_hokuyo_urg04lx name="hokuyo1" parent="base_link">
 		<origin xyz="-0.1 0.0 0.33" rpy="0 0 0"/>
 	</xacro:sensor_hokuyo_urg04lx>
 -->
 
-<!--
+	<!--
   <xacro:sensor_hokuyo_ust10lx name="hokuyo_base" parent="base_link">
 		<origin xyz="0.0 0.0 0.33" rpy="0 0 0"/>
 	</xacro:sensor_hokuyo_ust10lx>
 -->
 
-<!--
+	<!--
 	<xacro:sensor_imu name="imu" parent="base_link">
 		<origin xyz="-0.18 0.0 0.170" rpy="0 0 0"/>
 	</xacro:sensor_imu>
 -->
-<!--  
+	<!--  
 	<xacro:sensor_gps name="gps" parent="base_link">
 		<origin xyz="-0.22 0 0.275" rpy="0 0 0"/>
 	</xacro:sensor_gps>
 -->
 
-<!--
+	<!--
 	<xacro:sensor_kinect name="kinect" parent="base_link">
 		<origin xyz="0.325 0.0 0.16" rpy="0 0 0"/> 
 	</xacro:sensor_kinect>  
 -->
-  
-<!--
+
+	<!--
 	<xacro:sensor_fotonic name="fotonic" parent="base_link">
 		<origin xyz="0.3 0.0 0.24" rpy="0 0 0"/> 
 	</xacro:sensor_fotonic>  
 -->
-  
+
 
 </robot>
 
