@@ -14,8 +14,10 @@
 	xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering"
     xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable"
     xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics"
-	xmlns:xacro="http://ros.org/wiki/xacro" name="mico2fingers">
-
+  xmlns:xacro="http://ros.org/wiki/xacro" name="mico2fingers">
+  
+  <xacro:arg name="interface" default="velocity"/>
+  <xacro:arg name="enable_ft_sensor" default="false"/>
 
   <xacro:include filename="$(find mico_description)/urdf/mico2fingers.xacro"/>
 
@@ -27,7 +29,6 @@
       </geometry>
     <!--<material name="Black" /> -->
     </visual>
-
     <collision>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
@@ -45,7 +46,6 @@
       </geometry>
     <!--<material name="Black" /> -->
     </visual>
-
     <collision>
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <geometry>
@@ -57,11 +57,12 @@
   <joint name="connect_root_and_world" type="fixed">
     <child link="root" />
     <parent link="world" />
-    <origin xyz="0 0 0" rpy="0 0 0" />    
+    <origin xyz="0 0 0.1" rpy="0 0 0" />    
   </joint> 
 
   <property name="robot_root" value="root" />
 
-  <xacro:mico2fingers  base_parent="${robot_root}"/>
+
+  <xacro:mico2fingers  base_parent="${robot_root}" interface="$(arg interface)"/>
 
 </robot>

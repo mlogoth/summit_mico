@@ -2,18 +2,197 @@
 
 <root xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:macro name="gazebo_config" params="robot_namespace">
+  <xacro:macro name="gazebo_config" params="robot_namespace">
 
     <!-- ros_control plugin -->
-    <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>${robot_namespace}</robotNamespace>
-        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-        <legacyModeNS>true</legacyModeNS>
-        <controlPeriod> 0.001</controlPeriod>
-      </plugin>
+    <xacro:unless value="${robot_namespace == ''}">
+      <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+          <robotNamespace>${robot_namespace}</robotNamespace>
+          <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+          <legacyModeNS>true</legacyModeNS>
+          <controlPeriod> 0.001</controlPeriod>
+        </plugin>
+      </gazebo>
+    </xacro:unless>
+
+    <xacro:if value="${robot_namespace == ''}">
+      <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+          <!-- <robotNamespace>${robot_namespace}</robotNamespace> -->
+          <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+          <legacyModeNS>true</legacyModeNS>
+          <controlPeriod> 0.001</controlPeriod>
+        </plugin>
+      </gazebo>
+    </xacro:if>
+
+  </xacro:macro>
+
+
+  <!-- Gazebo Colors Material -->
+  <xacro:macro name="gazebo_materials" params="prefix:='' color:='default'">
+    <!-- base_link -->
+    <gazebo reference="${prefix}_link_base">
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <xacro:if value="${color == 'default'}">
+        <visual>
+          <material>
+            <ambient>0.55 0.85 0.89 1.0</ambient>
+            <diffuse>.7 .7 .7  1.0</diffuse>
+            <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+          </material>
+        </visual>
+      </xacro:if>
+      <xacro:if value="${color == 'red'}">
+        <material>
+          Gazebo/Red
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'green'}">
+        <material>
+          Gazebo/Green
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'orange'}">
+        <material>
+          Gazebo/Orange
+        </material>
+      </xacro:if>
+
     </gazebo>
 
-</xacro:macro>
+
+    <!-- Link1 -->
+    <gazebo reference="${prefix}_link_1">
+      <visual>
+        <material>
+          <ambient>0.88 0.88 0.88 1.0</ambient>
+          <diffuse>.7 .7 .7  1.0</diffuse>
+          <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <!-- Link2 -->
+    <gazebo reference="${prefix}_link_2">
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <xacro:if value="${color == 'default'}">
+        <visual>
+          <material>
+            <ambient>0.55 0.85 0.89 1.0</ambient>
+            <diffuse>.7 .7 .7  1.0</diffuse>
+            <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+          </material>
+        </visual>
+      </xacro:if>
+      <xacro:if value="${color == 'red'}">
+        <material>
+          Gazebo/Red
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'green'}">
+        <material>
+          Gazebo/Green
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'orange'}">
+        <material>
+          Gazebo/Orange
+        </material>
+      </xacro:if>
+
+    </gazebo>
+
+    <!-- Link3 -->
+    <gazebo reference="${prefix}_link_3">
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <visual>
+        <material>
+          <ambient>0.88 0.88 0.88 1.0</ambient>
+          <diffuse>.7 .7 .7  1.0</diffuse>
+          <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <!-- Link4 -->
+    <gazebo reference="${prefix}_link_4">
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <xacro:if value="${color == 'default'}">
+        <visual>
+          <material>
+            <ambient>0.55 0.85 0.89 1.0</ambient>
+            <diffuse>.7 .7 .7  1.0</diffuse>
+            <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+          </material>
+        </visual>
+      </xacro:if>
+      <xacro:if value="${color == 'red'}">
+        <material>
+          Gazebo/Red
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'green'}">
+        <material>
+          Gazebo/Green
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'orange'}">
+        <material>
+          Gazebo/Orange
+        </material>
+      </xacro:if>
+    </gazebo>
+
+    <!-- Link5 -->
+    <gazebo reference="${prefix}_link_5">
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <visual>
+        <material>
+          <ambient>0.88 0.88 0.88 1.0</ambient>
+          <diffuse>.7 .7 .7  1.0</diffuse>
+          <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <!-- Link6 -->
+    <gazebo reference="${prefix}_link_6">
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <xacro:if value="${color == 'default'}">
+        <visual>
+          <material>
+            <ambient>0.55 0.85 0.89 1.0</ambient>
+            <diffuse>.7 .7 .7  1.0</diffuse>
+            <specular>0.01 0.01 0.01 1.000000 1.500000</specular>
+          </material>
+        </visual>
+      </xacro:if>
+      <xacro:if value="${color == 'red'}">
+        <material>
+          Gazebo/Red
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'green'}">
+        <material>
+          Gazebo/Green
+        </material>
+      </xacro:if>
+      <xacro:if value="${color == 'orange'}">
+        <material>
+          Gazebo/Orange
+        </material>
+      </xacro:if>
+
+    </gazebo>
+
+  </xacro:macro>
 
 </root>

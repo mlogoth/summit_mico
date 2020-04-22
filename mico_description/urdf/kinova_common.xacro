@@ -57,7 +57,7 @@
       <axis xyz="${joint_axis_xyz}"/>
       <limit effort="${joint_torque_limit}" velocity="${joint_velocity_limit}" lower="${joint_lower_limit}" upper="${joint_upper_limit}"/>
       <origin xyz="${joint_origin_xyz}" rpy="${joint_origin_rpy}"/>
-      <dynamics damping="0.2" friction="0.1"/>
+      <dynamics damping="0.3" friction="0.1"/>
     </joint>
     <xacro:unless value="${fixed}">
       <xacro:if value="${interface=='position'}">
@@ -114,7 +114,7 @@
   </xacro:macro>
 
 
-  <xacro:macro name="kinova_finger" params="prefix finger_number hand finger_origin_xyz finger_origin_rpy">
+  <xacro:macro name="kinova_finger" params="prefix finger_number hand finger_origin_xyz finger_origin_rpy interface:=velocity">
 
     <xacro:kinova_armlink link_name="${prefix}link_finger_${finger_number}" link_mesh="finger_proximal" mesh_no="57"/>
 
@@ -125,17 +125,6 @@
       <origin xyz="${finger_origin_xyz}" rpy="${finger_origin_rpy}"/>
       <limit lower="0" upper="1.51" effort="2" velocity="1"/>
     </joint>
-    <transmission name="${prefix}joint_finger_${finger_number}_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}joint_finger_${finger_number}">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}joint_finger_${finger_number}_actuator">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
 
 
     <xacro:kinova_armlink link_name="${prefix}link_finger_tip_${finger_number}" link_mesh="finger_distal" mesh_no="58"/>
@@ -147,16 +136,77 @@
       <origin xyz="0.044 -0.003 0" rpy="0 0 0"/>
       <limit lower="0" upper="2" effort="2" velocity="1"/>
     </joint>
-    <transmission name="${prefix}joint_finger_tip_${finger_number}_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}joint_finger_tip_${finger_number}">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}joint_finger_tip_${finger_number}_actuator">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
+
+    <xacro:if value="${interface == 'effort'}">
+      <transmission name="${prefix}joint_finger_${finger_number}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}joint_finger_${finger_number}">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}joint_finger_${finger_number}_actuator">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${prefix}joint_finger_tip_${finger_number}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}joint_finger_tip_${finger_number}">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}joint_finger_tip_${finger_number}_actuator">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+    </xacro:if>
+    <xacro:if value="${interface == 'velocity'}">
+      <transmission name="${prefix}joint_finger_${finger_number}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}joint_finger_${finger_number}">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}joint_finger_${finger_number}_actuator">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${prefix}joint_finger_tip_${finger_number}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}joint_finger_tip_${finger_number}">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}joint_finger_tip_${finger_number}_actuator">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+    </xacro:if>
+    <xacro:if value="${interface == 'position'}">
+      <transmission name="${prefix}joint_finger_${finger_number}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}joint_finger_${finger_number}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}joint_finger_${finger_number}_actuator">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${prefix}joint_finger_tip_${finger_number}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}joint_finger_tip_${finger_number}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}joint_finger_tip_${finger_number}_actuator">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      
+    </xacro:if>
+
+    
+
 
   </xacro:macro>
 

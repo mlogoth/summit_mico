@@ -49,8 +49,24 @@
 				<odometryTopic>robotnik_base_control/odom</odometryTopic>
 				<odometryFrame>${prefix}odom</odometryFrame>
 				<yaw_velocity_p_gain>10000.0</yaw_velocity_p_gain>
-				<x_velocity_p_gain>10000.0</x_velocity_p_gain>
-				<y_velocity_p_gain>10000.0</y_velocity_p_gain>
+				<x_velocity_p_gain>100000.0</x_velocity_p_gain>
+				<y_velocity_p_gain>100000.0</y_velocity_p_gain>
+				<robotBaseFrame>${prefix}base_footprint</robotBaseFrame>
+				<odometryRate>100.0</odometryRate>
+				<publishOdometryTf>${publish_tf}</publishOdometryTf>
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<xacro:macro name="ros_force_based_move_diff" params="publish_tf prefix">
+		<gazebo>
+			<plugin name="ros_force_based_move" filename="libgazebo_ros_force_based_move.so">
+				<commandTopic>robotnik_base_control/cmd_vel</commandTopic>
+				<odometryTopic>robotnik_base_control/odom</odometryTopic>
+				<odometryFrame>${prefix}odom</odometryFrame>
+				<yaw_velocity_p_gain>10000.0</yaw_velocity_p_gain>
+				<x_velocity_p_gain>100000.0</x_velocity_p_gain>
+				<y_velocity_p_gain>0.0</y_velocity_p_gain>
 				<robotBaseFrame>${prefix}base_footprint</robotBaseFrame>
 				<odometryRate>100.0</odometryRate>
 				<publishOdometryTf>${publish_tf}</publishOdometryTf>

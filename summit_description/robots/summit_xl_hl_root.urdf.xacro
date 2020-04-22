@@ -3,23 +3,24 @@
     xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
-    <xacro:macro name="summit_xl_robot" params="prefix *origin kinematic_model:='omni' kinect:=true mini_pc:=true">
+    <!-- ***************** -->
+    <!-- Imported elements -->
+    <!-- ***************** -->
+
+    <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+    <!-- Import summit XL base elements -->
+    <xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
+    <!-- Import summit XL wheels -->
+    <xacro:include filename="$(find summit_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
+    <!-- Import summit XL wheels -->
+    <xacro:include filename="$(find summit_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+    <!-- Import all available sensors -->
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
 
-        <!-- ***************** -->
-        <!-- Imported elements -->
-        <!-- ***************** -->
 
-        <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
-
-        <!-- Import summit XL base elements -->
-        <xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_hl_base.urdf.xacro" />
-        <!-- Import summit XL wheels -->
-        <xacro:include filename="$(find summit_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
-        <!-- Import summit XL wheels -->
-        <xacro:include filename="$(find summit_description)/urdf/wheels/omni_wheel.urdf.xacro" />
-        <!-- Import all available sensors -->
-        <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+    <xacro:macro name="summit_xl_robot" params="prefix *origin kinematic_model:='omni' kinect:=true mini_pc:=true enable_ros_control=true">
 
 
 
@@ -48,7 +49,7 @@
             <parent link="world"/>
             <child link="${prefix}odom"/>
         </joint> -->
-<!--         
+        <!--         
         <link name="${prefix}odom">
             <inertial>
                 <origin rpy="0 0 0" xyz="0 0 0.0"/>
@@ -65,7 +66,7 @@
 
         <!-- WHEELS -->
 
-        <xacro:if value="${kinematic_model == 'omni'}">
+        <xacro:if value="${kinematic_model in ['omni', 'force_omni']}">
 
             <!-- OMNI WHEELS -->
             <xacro:omni_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="true">
@@ -83,21 +84,21 @@
         </xacro:if>
 
 
-        <xacro:unless value="${kinematic_model == 'omni'}">
+        <xacro:if value="${kinematic_model not in ['omni', 'force_omni']}">
             <!-- RUBBER WHEELS MIMIC-->
-            <xacro:rubber_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="${hq}" >
+            <xacro:rubber_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="${hq}">
                 <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
-            <xacro:rubber_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="${hq}" >
+            <xacro:rubber_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="${hq}">
                 <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
-            <xacro:rubber_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="true" hq="${hq}" >
+            <xacro:rubber_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="true" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
             <xacro:rubber_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="false" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
-        </xacro:unless>
+        </xacro:if>
 
 
         <!-- SENSORS -->
@@ -222,16 +223,22 @@
             <xacro:omni_steering prefix="${prefix}" publish_tf="false"/>
         </xacro:if>
 
-        <xacro:if value="${kinematic_model == 'skid'}">
+        <xacro:if value="${kinematic_model in ['skid','diff']}">
             <xacro:skid_steering prefix="${prefix}" publish_tf="false"/>
         </xacro:if>
 
-        <xacro:if value="${kinematic_model == 'diff'}">
-            <xacro:skid_steering prefix="${prefix}" publish_tf="false"/>
+        <xacro:if value="${kinematic_model == 'force_omni'}">
+            <xacro:ros_force_based_move prefix="${prefix}" publish_tf="false"/>
         </xacro:if>
 
+        <xacro:if value="${kinematic_model == 'force_diff'}">
+            <xacro:ros_force_based_move_diff prefix="${prefix}" publish_tf="false"/>
+        </xacro:if>
 
-        <xacro:ros_control/>
+        <xacro:if value="${enable_ros_control}">
+            <xacro:ros_control/>
+        </xacro:if>
+        
 
     </xacro:macro>
 </robot>
