@@ -5,6 +5,7 @@
     <xacro:arg name="mode" default="omni"/>
     <xacro:arg name="camera" default="false"/>
     <xacro:arg name="prefix" default=""/>
+    
 
     <!-- Import summit XL root -->
     <xacro:include filename="$(find summit_description)/robots/summit_xl_hl_root.urdf.xacro" />

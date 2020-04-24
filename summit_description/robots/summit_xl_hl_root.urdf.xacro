@@ -228,11 +228,11 @@
         </xacro:if>
 
         <xacro:if value="${kinematic_model == 'force_omni'}">
-            <xacro:ros_force_based_move prefix="${prefix}" publish_tf="false"/>
+            <xacro:ros_force_based_move prefix="${prefix}" publish_tf="true"/>
         </xacro:if>
 
         <xacro:if value="${kinematic_model == 'force_diff'}">
-            <xacro:ros_force_based_move_diff prefix="${prefix}" publish_tf="false"/>
+            <xacro:ros_force_based_move_diff prefix="${prefix}" publish_tf="true"/>
         </xacro:if>
 
         <xacro:if value="${enable_ros_control}">

@@ -2,9 +2,15 @@
 <robot name="summit_mico_csl" 
     xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <xacro:arg name="prefix" default=""/>
+    <xacro:arg name="platform_mode" default="omni"/>
+    <xacro:arg name="arm_interface" default="velocity"/>
+    <xacro:arg name="enable_camera" default="true"/>
+    <xacro:arg name="color" default="None"/> 
+
     <!-- Import summit XL root -->
     <xacro:include filename="$(find summit_mico_description)/robots/summit_mico_root.xacro" />
 
-    <xacro:summit_mico prefix="" />
+    <xacro:summit_mico prefix="$(arg prefix)" platform_mode="$(arg platform_mode)" arm_interface="$(arg arm_interface)" color="$(arg color)" camera="$(arg enable_camera)"/>
 
 </robot>

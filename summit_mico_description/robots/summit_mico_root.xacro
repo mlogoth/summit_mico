@@ -15,8 +15,8 @@
         <xacro:unless value="${platform_mode in ['omni', 'force_omni', 'force', 'Omni']}">
             <xacro:property name="kin_mode" value="force_diff"/>
         </xacro:unless>
-        
-        <xacro:summit_xl_robot prefix="" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false">
+
+        <xacro:summit_xl_robot prefix="${prefix}" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:summit_xl_robot>
 
@@ -27,20 +27,20 @@
             </inertial>
         </link> -->
         
-        <link name="root">
+        <link name="${prefix}root">
             <inertial>
                 <mass value="1"/>
                 <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
             </inertial>
         </link>
-        <joint name="connect_root_and_summit" type="fixed">
-          <child link="root" />
-          <parent link="base_link" />
+        <joint name="${prefix}connect_root_and_summit" type="fixed">
+          <child link="${prefix}root" />
+          <parent link="${prefix}base_link" />
           <origin xyz="0.19 0 0.17" rpy="0 ${0.0*PI/180} 0" />    
         </joint> 
-        <property name="robot_root" value="root" />
+        <property name="robot_root" value="${prefix}root" />
 
-        <xacro:mico2fingers base_parent="root" prefix="mico" interface="${arm_interface}" robot_control_ns='' color="${color}"/>
+        <xacro:mico2fingers base_parent="${prefix}root" prefix="${prefix}mico" interface="${arm_interface}" robot_control_ns='' color="${color}" J2_offset="2.355" J3_offset="2.355"  J4_offset="0.0" J6_offset="1.57" />
 
     </xacro:macro>
 
