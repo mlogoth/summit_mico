@@ -16,7 +16,7 @@
             <xacro:property name="kin_mode" value="force_diff"/>
         </xacro:unless>
 
-        <xacro:summit_xl_robot prefix="${prefix}" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false">
+        <xacro:summit_xl_robot prefix="${prefix}" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false" publish_tf="false" virtual_platform_joints="true">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:summit_xl_robot>
 

@@ -1,68 +1,157 @@
 <?xml version="1.0"?>
-<robot name="summit_xl" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+<robot name="summit_xl" 
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  
-	<xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_base.gazebo.xacro" />
 
-  <xacro:macro name="summit_xl_hl_base" params="prefix publish_bf hq">
+  <xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_base.gazebo.xacro" />
 
-  <!-- Robot mechanical and motor parameters -->
-  <xacro:property name="PI" value="3.1415926535897931"/>
-  <xacro:property name="wheel_width" value="0.175" />
+  <xacro:macro name="summit_xl_hl_base" params="prefix publish_bf hq virtual_platform_joints:=false *origin">
 
-  <!-- BASE FOOTPRINT -->
-  <xacro:if value="${publish_bf}">
-    <link name="${prefix}base_footprint">
-      <visual>
+    <!-- Robot mechanical and motor parameters -->
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="wheel_width" value="0.175" />
+
+    <!-- BASE FOOTPRINT -->
+    <xacro:if value="${publish_bf}">
+      <link name="${prefix}base_footprint">
+        <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
-             <box size="0.001 0.001 0.001" />
+            <box size="0.001 0.001 0.001" />
           </geometry>
-      </visual>
+        </visual>
+        <inertial>
+          <mass value="155.0" />
+          <origin xyz="0 0 0" />
+          <inertia ixx="230.391" ixy="0.004" ixz="0.0" iyy="236.853" iyz="0.0" izz="236.125" />
+        </inertial>
+      </link>
+
+      <joint name="${prefix}base_footprint_joint" type="fixed">
+        <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+        <!-- ${wheel_radius} property must be defined inside wheel description -->
+        <parent link="${prefix}base_footprint"/>
+        <child link="${prefix}base_link" />
+      </joint>
+    </xacro:if>
+
+    <!-- BASE_LINK -->
+    <link name="${prefix}base_link">
       <inertial>
         <mass value="155.0" />
         <origin xyz="0 0 0" />
-        <inertia  ixx="230.391" ixy="0.004"  ixz="0.0"  iyy="236.853"  iyz="0.0"  izz="236.125" />
+        <inertia ixx="230.391" ixy="0.004" ixz="0.0" iyy="236.853" iyz="0.0" izz="236.125" />
       </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <xacro:if value="${hq}">
+          <geometry>
+            <mesh filename="package://summit_description/meshes/bases/summit_xl_hl_chassis.dae"/>
+          </geometry>
+        </xacro:if>
+        <xacro:unless value="${hq}">
+          <geometry>
+            <mesh filename="package://summit_description/meshes/bases/summit_xl_hl_chassis.dae"/>
+          </geometry>
+        </xacro:unless>
+        <material name="darkgrey">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <geometry>
+          <mesh filename="package://summit_description/meshes/bases/summit_xl_hl_chassis.dae"/>
+        </geometry>
+      </collision>
     </link>
 
-    <joint name="${prefix}base_footprint_joint" type="fixed">
-      <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" /> <!-- ${wheel_radius} property must be defined inside wheel description -->
-      <parent link="${prefix}base_footprint"/>
-      <child link="${prefix}base_link" />
-    </joint>    
-  </xacro:if>
 
-  <!-- BASE_LINK -->
-  <link name="${prefix}base_link">
-    <inertial>
-      <mass value="155.0" />
-      <origin xyz="0 0 0" />
-      <inertia  ixx="230.391" ixy="0.004"  ixz="0.0"  iyy="236.853"  iyz="0.0"  izz="236.125" />
-    </inertial>
-    <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-       <xacro:if value="${hq}">
-       <geometry>
-	     <mesh filename="package://summit_description/meshes/bases/summit_xl_hl_chassis.dae"/>
-       </geometry>
-       </xacro:if>
-       <xacro:unless value="${hq}">
-       <geometry>
-	     <mesh filename="package://summit_description/meshes/bases/summit_xl_hl_chassis.dae"/>
-       </geometry>
-       </xacro:unless>
-       <material name="darkgrey">
-         <color rgba="0.1 0.1 0.1 1"/>
-       </material>
-    </visual>  
-    <collision>
-       <origin xyz="0 0 0" rpy="0 0 0 " />
-       <geometry>
-         <mesh filename="package://summit_description/meshes/bases/summit_xl_hl_chassis.dae"/>
-       </geometry>
-    </collision>     
-  </link>
+    <!-- Add Virtual Platform Joints in URDF -->
+    <xacro:if value="${virtual_platform_joints}">
+
+      <link name="${prefix}world">
+        <inertial>
+          <mass value="1.0" />
+          <origin xyz="0 0 0" />
+          <inertia ixx="1.0" ixy="0.004" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+      </link>
+      <!-- robot world -> prismatic (x) -> linear_1 -->
+      <link name="${prefix}platform_linear_1">
+        <inertial>
+          <mass value="1.0" />
+          <origin xyz="0 0 0" />
+          <inertia ixx="1.0" ixy="0.004" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+      </link>
+      <!-- linear_1 -> prismatic (y) -> linear_2 -->
+      <link name="${prefix}platform_linear_2">
+        <inertial>
+          <mass value="1.0" />
+          <origin xyz="0 0 0" />
+          <inertia ixx="1.0" ixy="0.004" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+      </link>
+
+      <joint name="${prefix}platform_prismatic_x" type="prismatic">
+        <xacro:insert_block name="origin" />
+        <parent link="${prefix}world"/>
+        <child link="${prefix}platform_linear_1" />
+        <axis xyz="1 0 0"/>
+        <limit lower="-500" upper="500" effort="200" velocity="5"/>
+      </joint>
+
+      <joint name="${prefix}platform_prismatic_y" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="${prefix}platform_linear_1"/>
+        <child link="${prefix}platform_linear_2" />
+        <axis xyz="0 1 0"/>
+        <limit lower="-500" upper="500" effort="200" velocity="5"/>
+      </joint>
+
+      <joint name="${prefix}platform_continuous_z" type="continuous">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="${prefix}platform_linear_2"/>
+        <child link="${prefix}base_footprint" />
+        <axis xyz="0 0 1"/>
+        <limit lower="-500" upper="500" effort="200" velocity="5"/>
+      </joint>
+
+      <transmission name="${prefix}platform_prismatic_x_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}platform_prismatic_x">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}platform_prismatic_x_actuator">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+      <transmission name="${prefix}platform_prismatic_y_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}platform_prismatic_y">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}platform_prismatic_y_actuator">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+      <transmission name="${prefix}platform_continuous_z_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}platform_continuous_z">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}platform_continuous_z_actuator">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+    </xacro:if>
 
 
   </xacro:macro>
