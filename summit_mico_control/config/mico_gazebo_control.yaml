@@ -83,6 +83,23 @@ effort_joint_trajectory_controller:
     - $(arg prefix)mico_joint_6
     type: effort_controllers/JointTrajectoryController
 
+# platform_virtual_joint_controller:
+#     constraints:
+#       goal_time: 1.0
+#       $(arg prefix)platform_prismatic_x: *joint_constraints
+#       $(arg prefix)platform_prismatic_y: *joint_constraints
+#       $(arg prefix)platform_continuous_z: *joint_constraints
+#       stopped_velocity_tolerance: 0.02
+#     gains:
+#       $(arg prefix)platform_prismatic_x: &joint_gains1 { p: 1.0, i: 0.0, d: 0.0, i_clamp: 10.0 }
+#       $(arg prefix)platform_prismatic_y: *joint_gains1
+#       $(arg prefix)platform_continuous_z: *joint_gains1
+#     joints:
+#       - $(arg prefix)platform_prismatic_x
+#       - $(arg prefix)platform_prismatic_y
+#       - $(arg prefix)platform_continuous_z
+#     type: position_controllers/JointTrajectoryController
+
 # -------------------- #
 # POSITION CONTROLLERS #
 # -------------------- #

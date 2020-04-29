@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<package>
+<package format="2">
   <name>summit_mico_control</name>
-  <version>1.1.1</version>
+  <version>0.0.0</version>
   <description>
 		This package contains the launch files that load the required controller interfaces for simulation in Gazebo.
   </description>
@@ -12,9 +12,60 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   
-  <run_depend>ros_controllers</run_depend>
-  <run_depend>ros_control</run_depend>
-  <run_depend>robot_state_publisher</run_depend>
-  <run_depend>summit_xl_pad</run_depend>  
+  <exec_depend>ros_controllers</exec_depend>
+  <exec_depend>ros_control</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>summit_xl_pad</exec_depend>
+
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>control_msgs</build_depend>
+  <build_depend>control_toolbox</build_depend>
+  <build_depend>controller_interface</build_depend>
+  <build_depend>controller_manager</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>joint_limits_interface</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>urdf</build_depend>
+
+  <build_export_depend>cmake_modules</build_export_depend>
+  <build_export_depend>control_msgs</build_export_depend>
+  <build_export_depend>control_toolbox</build_export_depend>
+  <build_export_depend>controller_interface</build_export_depend>
+  <build_export_depend>controller_manager</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>hardware_interface</build_export_depend>
+  <build_export_depend>joint_limits_interface</build_export_depend>
+  <build_export_depend>pluginlib</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>tf</build_export_depend>
+  <build_export_depend>urdf</build_export_depend>
+
+  <exec_depend>cmake_modules</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>control_toolbox</exec_depend>
+  <exec_depend>controller_interface</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>hardware_interface</exec_depend>
+  <exec_depend>joint_limits_interface</exec_depend>
+  <exec_depend>pluginlib</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>urdf</exec_depend> 
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+    <controller_interface plugin="${prefix}/summit_mico_controllers_plugins.xml"/>
+  </export>
 
 </package>

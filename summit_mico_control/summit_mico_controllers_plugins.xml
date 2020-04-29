@@ -1,0 +1,9 @@
+<library path="lib/libsummit_mico_control">
+
+  <class name="summit_mico_control/platform_state_controller"
+    type="summit_mico_control::platform_state_controller"
+    base_class_type="controller_interface::ControllerBase">
+  </class>
+
+
+</library>
