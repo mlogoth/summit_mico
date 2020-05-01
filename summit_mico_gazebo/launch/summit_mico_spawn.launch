@@ -41,6 +41,7 @@
         <!-- <group ns="mico"> -->
         <!-- Mico Base Controllers -->
         <rosparam file="$(find summit_mico_control)/config/mico_gazebo_control.yaml" command="load" subst_value="true"/>
+        <rosparam file="$(find summit_mico_control)/config/summit_gazebo_control.yaml" command="load" subst_value="true"/>
 
         <!-- load the controllers -->
         <!-- <node name="mico_joint_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
@@ -50,7 +51,7 @@
             <!-- load the controllers -->
             <node name="mico_velocity_trajectory_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
             --timeout 120
-            velocity_finger_trajectory_controller
+            platform_state_controller
             effort_joint_trajectory_controller
             joint_state_controller"/>
         </group>
@@ -59,7 +60,7 @@
             <!-- load the controllers -->
             <node name="mico_trajectory_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
             --timeout 420
-            velocity_finger_trajectory_controller
+            platform_state_controller
             velocity_joint_trajectory_controller
             joint_state_controller"/>
         </group>
@@ -99,6 +100,8 @@
             <!-- <group ns="mico"> -->
             <!-- Mico Base Controllers -->
             <rosparam file="$(find summit_mico_control)/config/mico_gazebo_control.yaml" command="load" subst_value="true"/>
+            <rosparam file="$(find summit_mico_control)/config/summit_gazebo_control.yaml" command="load" subst_value="true"/>
+
 
             <!-- load the controllers -->
             <!-- <node name="mico_joint_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
@@ -107,16 +110,16 @@
             <group if="$(eval arg('interface') =='effort')">
                 <!-- load the controllers -->
                 <node name="mico_velocity_trajectory_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
-      velocity_finger_trajectory_controller
       effort_joint_trajectory_controller
+      platform_state_controller
       joint_state_controller"/>
             </group>
 
             <group if="$(eval arg('interface') =='velocity')">
                 <!-- load the controllers -->
                 <node name="mico_trajectory_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
-      velocity_finger_trajectory_controller
       velocity_joint_trajectory_controller
+      platform_state_controller
       joint_state_controller"/>
             </group>
 
