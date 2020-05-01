@@ -60,8 +60,8 @@
         <!-- <link name="world"/>  -->
 
         <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
-        
-        
+
+
         <!-- Summit XL base -->
         <xacro:if value="${kinematic_model in ['omni', 'force_omni']}">
             <xacro:property name="wheel_radius" value="0.127" />
@@ -70,8 +70,8 @@
         <xacro:unless value="${kinematic_model in ['omni', 'force_omni']}">
             <xacro:property name="wheel_radius" value="0.11" />
         </xacro:unless>
-        
-        <xacro:summit_xl_hl_base prefix="${prefix}" publish_bf="true" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}" >
+
+        <xacro:summit_xl_hl_base prefix="${prefix}" publish_bf="true" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}">
             <xacro:insert_block name="origin" />
         </xacro:summit_xl_hl_base>
 
@@ -230,26 +230,25 @@
 
 
         <!-- Gazebo ros control pluggins -->
-        <xacro:if value="${kinematic_model == 'omni'}">
-            <xacro:omni_steering prefix="${prefix}" publish_tf="${publish_tf}"/>
-        </xacro:if>
-
-        <xacro:if value="${kinematic_model in ['skid','diff']}">
-            <xacro:skid_steering prefix="${prefix}" publish_tf="${publish_tf}"/>
-        </xacro:if>
-
-        <xacro:if value="${kinematic_model == 'force_omni'}">
-            <xacro:ros_force_based_move prefix="${prefix}" publish_tf="${publish_tf}"/>
-        </xacro:if>
-
-        <xacro:if value="${kinematic_model == 'force_diff'}">
-            <xacro:ros_force_based_move_diff prefix="${prefix}" publish_tf="${publish_tf}"/>
-        </xacro:if>
+        <xacro:unless value="${virtual_platform_joints}">
+            <xacro:if value="${kinematic_model == 'omni'}">
+                <xacro:omni_steering prefix="${prefix}" publish_tf="${publish_tf}"/>
+            </xacro:if>
+            <xacro:if value="${kinematic_model in ['skid','diff']}">
+                <xacro:skid_steering prefix="${prefix}" publish_tf="${publish_tf}"/>
+            </xacro:if>
+            <xacro:if value="${kinematic_model == 'force_omni'}">
+                <xacro:ros_force_based_move prefix="${prefix}" publish_tf="${publish_tf}"/>
+            </xacro:if>
+            <xacro:if value="${kinematic_model == 'force_diff'}">
+                <xacro:ros_force_based_move_diff prefix="${prefix}" publish_tf="${publish_tf}"/>
+            </xacro:if>
+        </xacro:unless>
 
         <xacro:if value="${enable_ros_control}">
             <xacro:ros_control/>
         </xacro:if>
-        
+
 
     </xacro:macro>
 </robot>

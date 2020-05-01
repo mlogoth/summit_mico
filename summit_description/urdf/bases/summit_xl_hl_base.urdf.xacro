@@ -99,7 +99,7 @@
         <parent link="${prefix}world"/>
         <child link="${prefix}platform_linear_1" />
         <axis xyz="1 0 0"/>
-        <limit lower="-500" upper="500" effort="200" velocity="5"/>
+        <limit lower="-500" upper="500" effort="500" velocity="5"/>
       </joint>
 
       <joint name="${prefix}platform_prismatic_y" type="prismatic">
@@ -107,7 +107,7 @@
         <parent link="${prefix}platform_linear_1"/>
         <child link="${prefix}platform_linear_2" />
         <axis xyz="0 1 0"/>
-        <limit lower="-500" upper="500" effort="200" velocity="5"/>
+        <limit lower="-500" upper="500" effort="500" velocity="5"/>
       </joint>
 
       <joint name="${prefix}platform_continuous_z" type="continuous">
@@ -115,16 +115,16 @@
         <parent link="${prefix}platform_linear_2"/>
         <child link="${prefix}base_footprint" />
         <axis xyz="0 0 1"/>
-        <limit lower="-500" upper="500" effort="200" velocity="5"/>
+        <limit lower="-500" upper="500" effort="1000" velocity="5"/>
       </joint>
 
       <transmission name="${prefix}platform_prismatic_x_trans">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="${prefix}platform_prismatic_x">
-          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
         </joint>
         <actuator name="${prefix}platform_prismatic_x_actuator">
-          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
       </transmission>
@@ -132,10 +132,10 @@
       <transmission name="${prefix}platform_prismatic_y_trans">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="${prefix}platform_prismatic_y">
-          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
         </joint>
         <actuator name="${prefix}platform_prismatic_y_actuator">
-          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
       </transmission>
@@ -143,10 +143,10 @@
       <transmission name="${prefix}platform_continuous_z_trans">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="${prefix}platform_continuous_z">
-          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
         </joint>
         <actuator name="${prefix}platform_continuous_z_actuator">
-          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
       </transmission>
