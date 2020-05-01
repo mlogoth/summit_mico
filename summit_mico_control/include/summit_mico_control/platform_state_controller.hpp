@@ -40,7 +40,7 @@
 namespace summit_mico_control
 {
 
-class platform_state_controller : public controller_interface::Controller<hardware_interface::PositionJointInterface>
+class platform_state_controller : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
 {
 
 public:
@@ -65,6 +65,8 @@ public:
     void getCommand(const geometry_msgs::Twist::ConstPtr &msg);
     // Function that converts strings to lowercase.
     std::string str_tolower(std::string s);
+    double constrainAngle(double x);
+
 
 
 private:

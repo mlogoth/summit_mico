@@ -72,6 +72,7 @@ void platform_state_controller::read_xml_robot_params(const ros::NodeHandle &_no
             ROS_ERROR("platform_state_controller: Wrong Kinematic Mode Defined");
             platform_mode_ = "omni";
         }
+        std::cout<<"Platform Mode: "<<platform_mode_<<std::endl;
     }
 
     // Get Odom Frame
@@ -186,6 +187,13 @@ std::string platform_state_controller::str_tolower(std::string s)
     return s;
 }
 
+double platform_state_controller::constrainAngle(double x){
+    x = fmod(x + M_PI,2*M_PI);
+    if (x < 0)
+        x += 2*M_PI;
+    return x - M_PI;
+}
+
 void platform_state_controller::getCommand(const geometry_msgs::Twist::ConstPtr &msg)
 {
     command_velocity_[0] = msg->linear.x;
@@ -232,13 +240,18 @@ void platform_state_controller::eulerToQuatMsg(const double &roll, const double 
 
 bool platform_state_controller::init(hardware_interface::VelocityJointInterface *robot, ros::NodeHandle &n)
 {
+    ROS_INFO(" -- Initiate Platform State Controller -- ");
 
     // Get Parameters
     platform_state_controller::read_xml_robot_params(node_);
     platform_state_controller::read_xml_controller_params(node_);
 
+    ROS_INFO(" -- Read From Parameter Server -- ");
+
     // Init Subscribers and Publishers
     platform_state_controller::init_ros_communication();
+
+    ROS_INFO(" -- Init Ros Communication -- ");
 
     // Resize State Variables
     base_pose_.resize(3);
@@ -247,6 +260,7 @@ bool platform_state_controller::init(hardware_interface::VelocityJointInterface 
     qpos.resize(joint_names_.size());
     qvel.resize(joint_names_.size());
     qeff.resize(joint_names_.size());
+    command_velocity_.resize(3);
 
     // Initiate Base Orientation
     platform_state_controller::eulerToQuatMsg(0.0, 0.0, 0.0, base_orientation_);
@@ -269,13 +283,20 @@ void platform_state_controller::starting(const ros::Time &time)
     ros::spinOnce();
 
     std::cout << "Read Variables in Starting" << std::endl;
+    std::cout<< "Joint_ size: "<< joints_.size()<< std::endl;
     for (unsigned int i = 0; i < joints_.size(); i++)
     {
         qnam[i] = joints_[i].getName();
         qpos[i] = joints_[i].getPosition();
         qvel[i] = joints_[i].getVelocity();
         qeff[i] = joints_[i].getEffort();
+        std::cout<<"qname["<<i<<"] : "<<qnam[i]<<std::endl;
+        std::cout<<"qpos["<<i<<"] : "<<qpos[i]<<std::endl;
     }
+
+    command_velocity_[0] = 0.0;
+    command_velocity_[1] = 0.0; 
+    command_velocity_[2] = 0.0;
 
     // Init Send Command Zeros
     ROS_INFO("Send Zero Commands");
@@ -306,11 +327,13 @@ void platform_state_controller::update(const ros::Time &time, const ros::Duratio
     std::cout << "Velocity Commands Read By Topic: \n"
               << "Linear x: " << command_velocity_[0] << ", y: " << command_velocity_[1] << "| Angular z: " << command_velocity_[2] << std::endl;
     double rad_to_deg = 180.0 / 3.14;
-    std::cout << "Base Orientation: " << rad_to_deg * qpos[2] << std::endl;
+    std::cout << "Base Orientation (DEG): " << rad_to_deg * qpos[2] << std::endl;
+    double theta = platform_state_controller::constrainAngle(qpos[2]);
+    std::cout << "Constrained Orientation (DEG): " << rad_to_deg * theta << std::endl;
     // Calculate Velocity Commands wrt World Frame
     std::vector<double> vc = {0.0, 0.0, 0.0};
-    vc[0] = cos(qpos[2]) * command_velocity_[0] - sin(qpos[2]) * command_velocity_[1];
-    vc[1] = sin(qpos[2]) * command_velocity_[0] + cos(qpos[2]) * command_velocity_[1];
+    vc[0] = cos(theta) * command_velocity_[0] - sin(theta) * command_velocity_[1];
+    vc[1] = sin(theta) * command_velocity_[0] + cos(theta) * command_velocity_[1];
     vc[2] = command_velocity_[2];
     std::cout << "Calculated Velocity Commands: \n"
               << "Linear x: " << vc[0] << ", y: " << vc[1] << "| Angular z: " << vc[2] << std::endl;
