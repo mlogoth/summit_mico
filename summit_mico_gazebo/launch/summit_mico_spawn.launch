@@ -23,7 +23,7 @@
     <group if="$(eval arg('robot_id') =='')">
         <arg name="prefix" value=""/>
         <!-- Load the URDF into the ROS Parameter Server -->
-        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find summit_mico_description)/robots/summit_mico_csl.urdf.xacro' prefix:=$(arg prefix) platform_mode:=$(arg platform_mode) arm_interface:=$(arg arm_interface) enable_camera:=$(arg camera) color:=$(arg color)" />
+        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find summit_mico_description)/robots/summit_mico_csl.urdf.xacro' x:=$(arg x) y:=$(arg y) yaw:=$(arg yaw) prefix:=$(arg prefix) platform_mode:=$(arg platform_mode) arm_interface:=$(arg arm_interface) enable_camera:=$(arg camera) color:=$(arg color)" />
 
         <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
         <!-- <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model summit_mico -param robot_description $(arg robot_pose) -J mico_joint_1 0.0
@@ -32,7 +32,7 @@
     -J mico_joint_4 -2.07
     -J mico_joint_5 1.4
     -J mico_joint_6 0.0"/> -->
-        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model summit_mico -param robot_description $(arg robot_pose)"/>
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model summit_mico -param robot_description "/>
 
 
         <!-- Broadcast The initial Position -->
@@ -59,7 +59,7 @@
         <group if="$(eval arg('interface') =='velocity')">
             <!-- load the controllers -->
             <node name="mico_trajectory_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
-            --timeout 420
+            --timeout 20
             platform_state_controller
             velocity_joint_trajectory_controller
             joint_state_controller"/>
@@ -83,10 +83,10 @@
 
 
             <!-- Load the URDF into the ROS Parameter Server -->
-            <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find summit_mico_description)/robots/summit_mico_csl.urdf.xacro' prefix:=$(arg prefix) platform_mode:=$(arg platform_mode) arm_interface:=$(arg arm_interface) enable_camera:=$(arg camera) color:=$(arg color)" />
+            <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find summit_mico_description)/robots/summit_mico_csl.urdf.xacro' x:=$(arg x) y:=$(arg y) yaw:=$(arg yaw) prefix:=$(arg prefix) platform_mode:=$(arg platform_mode) arm_interface:=$(arg arm_interface) enable_camera:=$(arg camera) color:=$(arg color)" />
 
             <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-            <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model $(arg prefix)summit_mico -param robot_description $(arg robot_pose) -J $(arg prefix)mico_joint_1 0.0
+            <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model $(arg prefix)summit_mico -param robot_description  -J $(arg prefix)mico_joint_1 0.0
     -J $(arg prefix)mico_joint_2 0.0
     -J $(arg prefix)mico_joint_3 0.0
     -J $(arg prefix)mico_joint_4 0.0
@@ -118,10 +118,12 @@
             <group if="$(eval arg('interface') =='velocity')">
                 <!-- load the controllers -->
                 <node name="mico_trajectory_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
-      velocity_joint_trajectory_controller
-      platform_state_controller
-      joint_state_controller"/>
+                --namespace=/$(arg robot_id)
+                velocity_joint_trajectory_controller
+                platform_state_controller
+                joint_state_controller"/>
             </group>
+
 
 
             <!-- </group> -->

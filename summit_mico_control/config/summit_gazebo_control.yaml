@@ -76,9 +76,9 @@ platform_state_controller:
       $(arg prefix)platform_prismatic_y,
       $(arg prefix)platform_continuous_z
     ]
-  mode: omni
+  mode: $(arg platform_mode)
   odom_frame: $(arg prefix)odom
   base_frame: $(arg prefix)base_footprint
-  command_topic: robotnik_base_control/cmd_vel
-  odom_topic: robotnik_base_control/odom
+  command_topic: $(arg robot_id)/robotnik_base_control/cmd_vel
+  odom_topic: $(arg robot_id)/robotnik_base_control/odom
   publish_odom: false

@@ -61,11 +61,14 @@ public:
     void stopping(const ros::Time &time);
 
     void eulerToQuatMsg(const double &roll, const double &pitch, const double &yaw, geometry_msgs::Quaternion &msg_quat);
-    void init_ros_communication();
+    void init_ros_communication(const ros::NodeHandle& n);
     void getCommand(const geometry_msgs::Twist::ConstPtr &msg);
     // Function that converts strings to lowercase.
     std::string str_tolower(std::string s);
     double constrainAngle(double x);
+    std::string getLeafNamespace(const ros::NodeHandle& nh);
+    std::string getRootNamespace(const ros::NodeHandle& nh);
+
 
 
 

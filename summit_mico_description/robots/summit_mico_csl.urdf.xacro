@@ -6,11 +6,32 @@
     <xacro:arg name="platform_mode" default="omni"/>
     <xacro:arg name="arm_interface" default="velocity"/>
     <xacro:arg name="enable_camera" default="true"/>
-    <xacro:arg name="color" default="None"/> 
+    <xacro:arg name="color" default="None"/>
+    <xacro:arg name="x" default="0.0"/>
+    <xacro:arg name="y" default="0.0"/>
+    <xacro:arg name="yaw" default="0.0"/>
 
     <!-- Import summit XL root -->
     <xacro:include filename="$(find summit_mico_description)/robots/summit_mico_root.xacro" />
 
-    <xacro:summit_mico prefix="$(arg prefix)" platform_mode="$(arg platform_mode)" arm_interface="$(arg arm_interface)" color="$(arg color)" camera="$(arg enable_camera)"/>
+    <xacro:property name="prefix_" value="$(arg prefix)"/>
+
+    <xacro:unless value="${prefix_ == ''}">
+        <link name="world"/>
+        <joint name="$(arg prefix)connect_word_and_summit_world" type="fixed">
+            <origin xyz="$(arg x) $(arg y) 0" rpy="0 0 $(arg yaw)"/>
+            <parent link="world" />
+            <child link="$(arg prefix)world" />
+        </joint>
+        <xacro:summit_mico prefix="$(arg prefix)" platform_mode="$(arg platform_mode)" arm_interface="$(arg arm_interface)" color="$(arg color)" camera="$(arg enable_camera)">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:summit_mico>
+    </xacro:unless>
+
+    <xacro:if value="${prefix_ == ''}">
+        <xacro:summit_mico prefix="$(arg prefix)" platform_mode="$(arg platform_mode)" arm_interface="$(arg arm_interface)" color="$(arg color)" camera="$(arg enable_camera)">
+            <origin xyz="$(arg x) $(arg y) 0" rpy="0 0 $(arg yaw)"/>
+        </xacro:summit_mico>    
+    </xacro:if>
 
 </robot>

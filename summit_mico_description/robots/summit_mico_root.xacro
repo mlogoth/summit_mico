@@ -7,7 +7,7 @@
     <!--  -->
     <xacro:include filename="$(find mico_description)/urdf/mico2fingers.xacro" />
 
-    <xacro:macro name="summit_mico" params="prefix platform_mode:='omni' arm_interface:='velocity' color:='None' camera:=true">
+    <xacro:macro name="summit_mico" params="prefix *origin platform_mode:='omni' arm_interface:='velocity' color:='None' camera:=true">
 
         <xacro:if value="${platform_mode in ['omni', 'force_omni', 'force', 'Omni']}">
             <xacro:property name="kin_mode" value="force_omni"/>
@@ -17,7 +17,7 @@
         </xacro:unless>
 
         <xacro:summit_xl_robot prefix="${prefix}" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false" publish_tf="false" virtual_platform_joints="true">
-            <origin xyz="3 0 0" rpy="0 0 0"/>
+            <xacro:insert_block name="origin" />
         </xacro:summit_xl_robot>
 
         <!-- <link name="world">

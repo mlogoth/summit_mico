@@ -24,15 +24,14 @@
     <arg name="arm_interface" value="velocity"/> <!-- velocity, effort -->
     <arg name="camera" value="true"/>
     <arg name="color" value="None"/>
-    <arg name="robot_id" value=""/>
-    <arg name="x" value="0.0"/>
-    <arg name="y" value="0.0"/>
+    <arg name="robot_id" value="mm1"/>
+    <arg name="x" value="1.0"/>
+    <arg name="y" value="1.0"/>
     <arg name="z" value="0.0"/>
     <arg name="roll" value="0.0"/>
     <arg name="pitch" value="0.0"/>
     <arg name="yaw" value="0.0"/>
   </include>
-<!-- 
 
   <include file="$(find summit_mico_gazebo)/launch/summit_mico_spawn.launch">
     <arg name="platform_mode" value="diff"/> 
@@ -40,14 +39,13 @@
     <arg name="camera" value="false"/>
     <arg name="color" value="default"/>
     <arg name="robot_id" value="mm2"/>
-    <arg name="x" value="0.0"/>
+    <arg name="x" value="1.0"/>
     <arg name="y" value="-1.1"/>
     <arg name="z" value="0.0"/>
     <arg name="roll" value="0.0"/>
     <arg name="pitch" value="0.0"/>
-    <arg name="yaw" value="1.57"/>
-  </include>
- -->
+    <arg name="yaw" value="-1.57"/>
+  </include> 
 
   <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_mm1_odom" args="0.0 1.1 0.0 -1.57 0.0 0.0  world mm1_odom 1000" />
   <node pkg="tf" type="static_transform_publisher" name="world_to_mm2_odom" args="0.0 -1.1 0.0 1.57 0.0 0.0  world mm2_odom 1000" />

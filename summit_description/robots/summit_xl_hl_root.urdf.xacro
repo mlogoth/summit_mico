@@ -80,16 +80,16 @@
         <xacro:if value="${kinematic_model in ['omni', 'force_omni']}">
 
             <!-- OMNI WHEELS -->
-            <xacro:omni_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="true">
+            <xacro:omni_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="true" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:omni_wheel>
-            <xacro:omni_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="true">
+            <xacro:omni_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="true" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:omni_wheel>
-            <xacro:omni_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="false" hq="true">
+            <xacro:omni_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="false" hq="true" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:omni_wheel>
-            <xacro:omni_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="true" hq="true">
+            <xacro:omni_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="true" hq="true" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:omni_wheel>
         </xacro:if>
@@ -97,16 +97,16 @@
 
         <xacro:if value="${kinematic_model not in ['omni', 'force_omni']}">
             <!-- RUBBER WHEELS MIMIC-->
-            <xacro:rubber_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="${hq}">
+            <xacro:rubber_wheel prefix="${prefix}front_right" parent="${prefix}base_link" reflect="false" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
-            <xacro:rubber_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="${hq}">
+            <xacro:rubber_wheel prefix="${prefix}front_left" parent="${prefix}base_link" reflect="true" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
-            <xacro:rubber_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="true" hq="${hq}">
+            <xacro:rubber_wheel prefix="${prefix}back_left" parent="${prefix}base_link" reflect="true" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
-            <xacro:rubber_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="false" hq="${hq}">
+            <xacro:rubber_wheel prefix="${prefix}back_right" parent="${prefix}base_link" reflect="false" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:rubber_wheel>
         </xacro:if>
