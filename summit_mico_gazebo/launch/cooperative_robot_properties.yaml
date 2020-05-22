@@ -1,0 +1,33 @@
+# Number of agnets cooperate
+agents: 1  # 1,2 or 3
+
+# Object Properties
+object:
+  type: box
+  object_mass: 1.0
+
+# Robot 1 properties
+robot_1:
+  prefix: mm1_
+  platform_mode: omni
+  arm_interface: velocity
+  color: None
+  camera: true
+
+
+# Robot 2 properties
+robot_2:
+  prefix: mm2_
+  platform_mode: omni
+  arm_interface: velocity
+  color: None
+  camera: true
+
+
+# Robot 3 properties
+robot_3:
+  prefix: mm3_
+  platform_mode: omni
+  arm_interface: velocity
+  color: None
+  camera: true

@@ -32,6 +32,8 @@
 #include <std_msgs/String.h>
 
 #include "tf/transform_datatypes.h"
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 #include <hardware_interface/joint_command_interface.h>
 #include <pluginlib/class_list_macros.h>
@@ -63,6 +65,7 @@ public:
     void eulerToQuatMsg(const double &roll, const double &pitch, const double &yaw, geometry_msgs::Quaternion &msg_quat);
     void init_ros_communication(const ros::NodeHandle& n);
     void getCommand(const geometry_msgs::Twist::ConstPtr &msg);
+    void publishOdometry();
     // Function that converts strings to lowercase.
     std::string str_tolower(std::string s);
     double constrainAngle(double x);

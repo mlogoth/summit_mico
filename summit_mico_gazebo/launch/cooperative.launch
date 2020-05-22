@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+    <!-- If multiple robots set multiple=true and define the namespace -->
+    <arg name="paused" default="true"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <!-- num of agents -->
+    <arg name="agents" default="2"/>
+
+    <!-- robot properties "prefix platform_mode arm_interface color camera use_trajectory" -->
+    <arg name="robot_1" default="mm1 omni effort None true false"/>
+    <arg name="robot_2" default="mm2 omni effort default true false"/>
+    <arg name="robot_3" default="mm3 omni effort red true false"/>
+
+    <!-- object properties "type mass" -->
+    <!-- Type, mass, length, height, width-->
+    <arg name="object" default="cylinder 0.2 0.8 0.8 0.06"/>
+
+    <!-- Robot Properties -->
+    <!-- Distribution around cylindrical Object -->
+    <arg name="robot_2_theta" default="120"/>
+    <arg name="robot_3_theta" default="30"/>
+    <!-- Distribution on box object -->
+    <arg name="robot_2_dx" default="0"/>
+    <arg name="robot_3_dx" default="0"/>
+
+
+    <!-- Create Robot-1  Arguments -->
+    <arg name="robot_1_prefix" default="$(eval robot_1.split()[0])"/>
+    
+    <arg name="platform_mode" value="$(eval robot_1.split()[1])" if="$(eval robot_1.split()[1] in ['diff','omni'])"/>
+    <arg name="platform_mode" value="omni" unless="$(eval robot_1.split()[1] in ['diff','omni'])"/>
+    
+    <arg name="arm_interface" value="$(eval robot_1.split()[2])" if="$(eval robot_1.split()[2] in ['position','velocity','effort'])"/>
+    <arg name="arm_interface" value="velocity" unless="$(eval robot_1.split()[2] in ['position','velocity','effort'])"/>
+
+    <arg name="camera" default="$(eval robot_1.split()[4])"/>
+    <arg name="color" default="$(eval robot_1.split()[3])"/>
+
+    <!-- Create Robot-2  Arguments -->
+    <arg name="robot_2_prefix" default="$(eval robot_2.split()[0])"/>
+    
+    <arg name="platform_mode2" value="$(eval robot_2.split()[1])" if="$(eval robot_2.split()[1] in ['diff','omni'])"/>
+    <arg name="platform_mode2" value="omni" unless="$(eval robot_2.split()[1] in ['diff','omni'])"/>
+    
+    <arg name="arm_interface2" value="$(eval robot_2.split()[2])" if="$(eval robot_2.split()[2] in ['position','velocity','effort'])"/>
+    <arg name="arm_interface2" value="velocity" unless="$(eval robot_2.split()[2] in ['position','velocity','effort'])"/>
+
+    <arg name="camera2" default="$(eval robot_2.split()[4])"/>
+    <arg name="color2" default="$(eval robot_2.split()[3])"/>
+
+    <!-- Create Robot-3  Arguments -->
+    <arg name="robot_3_prefix" default="$(eval robot_3.split()[0])"/>
+    
+    <arg name="platform_mode3" value="$(eval robot_3.split()[1])" if="$(eval robot_3.split()[1] in ['diff','omni'])"/>
+    <arg name="platform_mode3" value="omni" unless="$(eval robot_3.split()[1] in ['diff','omni'])"/>
+    
+    <arg name="arm_interface3" value="$(eval robot_3.split()[2])" if="$(eval robot_3.split()[2] in ['position','velocity','effort'])"/>
+    <arg name="arm_interface3" value="velocity" unless="$(eval robot_3.split()[2] in ['position','velocity','effort'])"/>
+    
+    <arg name="camera3" default="$(eval robot_3.split()[4])"/>
+    <arg name="color3" default="$(eval robot_3.split()[3])"/>
+
+
+    <!-- Object Properties -->
+    <arg name="mass" default="$(eval object.split()[1])"/>
+    <arg name="height" default="$(eval object.split()[3])"/>
+    <arg name="length" default="$(eval object.split()[2])"/>
+    <arg name="width" default="$(eval object.split()[4])"/>
+
+    <arg name="type" value="box"  unless="$(eval object.split()[0]  in ['box','cylinder'])" />
+    <arg name="type" value="$(eval object.split()[0])"  if="$(eval object.split()[0] in ['box','cylinder'])" />
+
+
+    <!-- Robot Model on Parameter Server-->
+    <param name="robot_description" command="$(find xacro)/xacro  '$(find summit_mico_description)/robots/summit_mico_cooperative_root.urdf.xacro' agents:=$(arg agents) robot_1_prefix:=$(arg robot_1_prefix)_ platform_mode_1:=$(arg platform_mode) arm_interface_1:=$(arg arm_interface) camera_1:=$(arg camera) color_1:=$(arg color) robot_2_prefix:=$(arg robot_2_prefix)_ platform_mode_2:=$(arg platform_mode2) arm_interface_2:=$(arg arm_interface2) camera_2:=$(arg camera2) color_2:=$(arg color2) robot_3_prefix:=$(arg robot_3_prefix)_ platform_mode_3:=$(arg platform_mode3) arm_interface_3:=$(arg arm_interface3) camera_3:=$(arg camera3) color_3:=$(arg color3) type:=$(arg type) mass:=$(arg mass) heigth:=$(arg height) length:=$(arg length) width:=$(arg width) dx2:=$(arg robot_2_dx) theta2:=$(arg robot_2_theta) dx3:=$(arg robot_3_dx) theta3:=$(arg robot_3_theta)" />
+
+
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find summit_mico_gazebo)/worlds/summit_mico_empty.world"/>
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+
+
+    <!-- Spawn robot in Gazebo -->
+    <node pkg="gazebo_ros" type="spawn_model" name="summit_mico_spawn_model" args="-urdf -param robot_description -model summit_mico_cooperative"/>
+
+    <include file="$(find summit_mico_control)/launch/summit_mico_cooperative_control.launch">
+        <!-- namespace prefix -->
+        <arg name="robot_1_prefix" value="$(arg robot_1_prefix)"/>
+        <arg name="robot_2_prefix" value="$(arg robot_2_prefix)"/>
+        <arg name="robot_3_prefix" value="$(arg robot_3_prefix)"/>
+
+        <!-- platform kinematic mode -->
+        <arg name="robot_1_platform" value="$(arg platform_mode)"/>
+        <arg name="robot_2_platform" value="$(arg platform_mode2)"/>
+        <arg name="robot_3_platform" value="$(arg platform_mode3)"/>
+
+        <!-- joint interface ros -->
+        <arg name="robot_1_interface" value="$(arg arm_interface)"/>
+        <arg name="robot_2_interface" value="$(arg arm_interface2)"/>
+        <arg name="robot_3_interface" value="$(arg arm_interface3)"/>
+
+        <!-- Use ros joint trajectory controller -->
+        <arg name="robot_1_trajectory" value="$(eval robot_1.split()[5])"/>
+        <arg name="robot_2_trajectory" value="$(eval robot_2.split()[5])"/>
+        <arg name="robot_3_trajectory" value="$(eval robot_3.split()[5])"/>
+    </include>
+
+
+
+</launch>

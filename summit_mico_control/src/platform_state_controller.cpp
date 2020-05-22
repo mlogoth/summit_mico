@@ -24,7 +24,7 @@ namespace summit_mico_control
         std::string ns = _node.getNamespace();
 
         XmlRpc::XmlRpcValue joint_names;
-        if (!node_.getParam(ns+"/joints", joint_names))
+        if (!node_.getParam(ns + "/joints", joint_names))
         {
             ROS_ERROR("platform_state_controller: No 'joints' defined in controller. (namespace: %s)",
                       node_.getNamespace().c_str());
@@ -55,7 +55,7 @@ namespace summit_mico_control
     * Get Platform Type
     */
         XmlRpc::XmlRpcValue platform_mode;
-        if (!node_.getParam(ns+"/mode", platform_mode))
+        if (!node_.getParam(ns + "/mode", platform_mode))
         {
             ROS_ERROR("platform_state_controller: No 'mode' defined in controller. (namespace: %s)",
                       node_.getNamespace().c_str());
@@ -78,17 +78,18 @@ namespace summit_mico_control
         }
 
         // Get Odom Frame
-        if (node_.hasParam(ns+"/odom_frame"))
+        if (node_.hasParam(ns + "/odom_frame"))
         {
             XmlRpc::XmlRpcValue odom_frame;
-            node_.getParam(ns+"/odom_frame", odom_frame);
+            node_.getParam(ns + "/odom_frame", odom_frame);
             if (odom_frame.getType() != XmlRpc::XmlRpcValue::TypeString)
             {
                 ROS_ERROR("platform_state_controller: 'odom_frame' is not a string. (namespace: %s)",
                           node_.getNamespace().c_str());
             }
             odom_frame_ = (std::string)odom_frame;
-            ROS_INFO("platform_state_controller: Odometry Frame Name %s", odom_frame_);
+            ROS_INFO("platform_state_controller: Odometry Frame Name:");
+            std::cout << odom_frame_ << std::endl;
         }
         else
         {
@@ -97,17 +98,18 @@ namespace summit_mico_control
         }
 
         // Get Base Robot Frame
-        if (node_.hasParam(ns+"/base_frame"))
+        if (node_.hasParam(ns + "/base_frame"))
         {
             XmlRpc::XmlRpcValue base_frame;
-            node_.getParam("platform_state_controller/base_frame", base_frame);
+            node_.getParam(ns + "/base_frame", base_frame);
             if (base_frame.getType() != XmlRpc::XmlRpcValue::TypeString)
             {
                 ROS_ERROR("platform_state_controller: 'base_frame' is not a string. (namespace: %s)",
                           node_.getNamespace().c_str());
             }
             base_frame_ = (std::string)base_frame;
-            ROS_INFO("platform_state_controller: Base Frame Name %s", base_frame_);
+            ROS_INFO("platform_state_controller: Base Frame Name");
+            std::cout << base_frame_ << std::endl;
         }
         else
         {
@@ -124,17 +126,18 @@ namespace summit_mico_control
     {
         std::string ns = _node.getNamespace();
         // Get Command Topic
-        if (node_.hasParam(ns+"/command_topic"))
+        if (node_.hasParam(ns + "/command_topic"))
         {
             XmlRpc::XmlRpcValue command_topic;
-            node_.getParam(ns+"/command_topic", command_topic);
+            node_.getParam(ns + "/command_topic", command_topic);
             if (command_topic.getType() != XmlRpc::XmlRpcValue::TypeString)
             {
                 ROS_ERROR("platform_state_controller: 'command_topic' is not a string. (namespace: %s)",
                           node_.getNamespace().c_str());
             }
             command_topic_ = (std::string)command_topic;
-            ROS_INFO("platform_state_controller: Velocity Command Topic Name %s", command_topic_);
+            ROS_INFO("platform_state_controller: Velocity Command Topic Name");
+            std::cout << command_topic_ << std::endl;
         }
         else
         {
@@ -143,36 +146,39 @@ namespace summit_mico_control
         }
 
         // Get Odom Topic
-        if (node_.hasParam(ns+"/odom_topic"))
+        if (node_.hasParam(ns + "/odom_topic"))
         {
             XmlRpc::XmlRpcValue odom_topic;
-            node_.getParam(ns+"/odom_topic", odom_topic);
+            node_.getParam(ns + "/odom_topic", odom_topic);
             if (odom_topic.getType() != XmlRpc::XmlRpcValue::TypeString)
             {
                 ROS_ERROR("platform_state_controller: 'odom_topic' is not a string. (namespace: %s)",
                           node_.getNamespace().c_str());
             }
             odom_topic_ = (std::string)odom_topic;
-            ROS_INFO("platform_state_controller: Odometry Topic Name %s", odom_topic_);
+            ROS_INFO("platform_state_controller: Odometry Topic Name");
+            std::cout << odom_topic_ << std::endl;
         }
 
         else
         {
             ROS_WARN("Parameter 'Odometry Topic' not set, set the default one: 'platform_state_controller/odom'");
-            odom_topic_ = ns+"/odom";
+            odom_topic_ = ns + "/odom";
         }
 
         // Publish Odometry
-        if (node_.hasParam(ns+"/publish_odom"))
+        if (node_.hasParam(ns + "/publish_odom"))
         {
             XmlRpc::XmlRpcValue publish_odom;
-            node_.getParam(ns+"/publish_odom", publish_odom);
+            node_.getParam(ns + "/publish_odom", publish_odom);
             if (publish_odom.getType() != XmlRpc::XmlRpcValue::TypeBoolean)
             {
                 ROS_ERROR("platform_state_controller: 'publish_odom' is not a boolean. (namespace: %s)",
                           node_.getNamespace().c_str());
             }
             publish_odom_ = (bool)publish_odom;
+            ROS_INFO("platform_state_controller: Publish odom topic");
+            std::cout << publish_odom_ << std::endl;
         }
         else
         {
@@ -210,7 +216,7 @@ namespace summit_mico_control
 
     void platform_state_controller::init_ros_communication(const ros::NodeHandle &n)
     {
-        
+
         odom_pub_ = node_.advertise<nav_msgs::Odometry>(odom_topic_, 1000);
         cmd_sub_ = node_.subscribe(command_topic_, 100, &platform_state_controller::getCommand, this);
     }
@@ -229,32 +235,31 @@ namespace summit_mico_control
         return complete_ns.substr(1, id - 1);
     }
 
-    // void platform_state_controller::publishOdometry()
-    // {
-    //     // Publish as shared pointer to leverage the nodelets' zero-copy pub/sub feature
-    //     nav_msgs::OdometryPtr odom(new nav_msgs::Odometry);
-    //     // Header
-    //     odom->header.stamp = ros::Time::now();
-    //     odom->header.frame_id = odom_frame_;
-    //     odom->child_frame_id = base_frame_;
-    //     // Position
-    //     odom->pose.pose.position.x = base_pose_[0];
-    //     odom->pose.pose.position.y = base_pose_[1];
-    //     odom->pose.pose.position.z = 0.0;
-    //     odom->pose.pose.orientation = base_orientation_;
-    //     // Velocity
-    //     odom->twist.twist.linear.x = base_velocity_[0];
-    //     odom->twist.twist.linear.y = base_velocity_[1];
-    //     odom->twist.twist.angular.z = base_velocity_[2];
-    //     odom_pub_.publish(odom);
-    // }
+    void platform_state_controller::publishOdometry()
+    {
+        // Publish as shared pointer to leverage the nodelets' zero-copy pub/sub feature
+        nav_msgs::OdometryPtr odom(new nav_msgs::Odometry);
+        // Header
+        odom->header.stamp = ros::Time::now();
+        odom->header.frame_id = odom_frame_;
+        odom->child_frame_id = base_frame_;
+        // Position
+        odom->pose.pose.position.x = base_pose_[0];
+        odom->pose.pose.position.y = base_pose_[1];
+        odom->pose.pose.position.z = 0.0;
+        odom->pose.pose.orientation = base_orientation_;
+        // Velocity
+        odom->twist.twist.linear.x = base_velocity_[0];
+        odom->twist.twist.linear.y = base_velocity_[1];
+        odom->twist.twist.angular.z = base_velocity_[2];
+        odom_pub_.publish(odom);
+    }
 
     void platform_state_controller::eulerToQuatMsg(const double &roll, const double &pitch, const double &yaw, geometry_msgs::Quaternion &msg_quat)
     {
-        tf::Quaternion quat;
-        // the tf::Quaternion has a method to acess roll pitch and yaw
-        tf::Matrix3x3(quat).setRPY(roll, pitch, yaw);
-        tf::quaternionTFToMsg(quat, msg_quat);
+        tf2::Quaternion quat_tf;
+        quat_tf.setRPY( roll, pitch, yaw );
+        msg_quat = tf2::toMsg(quat_tf);
     }
 
     bool platform_state_controller::init(hardware_interface::VelocityJointInterface *robot, ros::NodeHandle &n)
@@ -313,6 +318,15 @@ namespace summit_mico_control
             std::cout << "qpos[" << i << "] : " << qpos[i] << std::endl;
         }
 
+        base_pose_[0] = qpos[0];
+        base_pose_[1] = qpos[1];
+
+        base_velocity_[0] = qvel[0];
+        base_velocity_[1] = qvel[1];
+        base_velocity_[2] = qvel[2];
+
+        platform_state_controller::eulerToQuatMsg(0.0, 0.0, qpos[2], base_orientation_);
+
         command_velocity_[0] = 0.0;
         command_velocity_[1] = 0.0;
         command_velocity_[2] = 0.0;
@@ -331,7 +345,7 @@ namespace summit_mico_control
         // Time Now
         double t = ros::Time::now().toSec() - begin;
         // Loop
-        std::cout << "===========================================" << std::endl;
+        // std::cout << "===========================================" << std::endl;
 
         // Read Joint Variables
         for (unsigned int i = 0; i < joints_.size(); i++)
@@ -343,25 +357,31 @@ namespace summit_mico_control
         }
 
         // Get Velcity Commands wrt Robot Frame
-        std::cout << "Velocity Commands Read By Topic: \n"
-                  << "Linear x: " << command_velocity_[0] << ", y: " << command_velocity_[1] << "| Angular z: " << command_velocity_[2] << std::endl;
         double rad_to_deg = 180.0 / 3.14;
-        std::cout << "Base Orientation (DEG): " << rad_to_deg * qpos[2] << std::endl;
         double theta = platform_state_controller::constrainAngle(qpos[2]);
-        std::cout << "Constrained Orientation (DEG): " << rad_to_deg * theta << std::endl;
+
         // Calculate Velocity Commands wrt World Frame
         std::vector<double> vc = {0.0, 0.0, 0.0};
         vc[0] = cos(theta) * command_velocity_[0] - sin(theta) * command_velocity_[1];
         vc[1] = sin(theta) * command_velocity_[0] + cos(theta) * command_velocity_[1];
         vc[2] = command_velocity_[2];
-        std::cout << "Calculated Velocity Commands: \n"
-                  << "Linear x: " << vc[0] << ", y: " << vc[1] << "| Angular z: " << vc[2] << std::endl;
+
+        if (publish_odom_)
+        {
+            base_pose_[0] = qpos[0];
+            base_pose_[1] = qpos[1];
+
+            base_velocity_[0] = qvel[0];
+            base_velocity_[1] = qvel[1];
+            base_velocity_[2] = qvel[2];
+
+            platform_state_controller::eulerToQuatMsg(0.0, 0.0, qpos[2], base_orientation_);
+            platform_state_controller::publishOdometry();
+        }
 
         // Calculate Odometry if Needed - Integrate Velocity
         for (unsigned int i = 0; i < joints_.size(); i++)
             joints_[i].setCommand(vc[i]);
-
-        std::cout << "===========================================" << std::endl;
     }
 
     void platform_state_controller::stopping(const ros::Time &time)

@@ -195,4 +195,25 @@
 
   </xacro:macro>
 
+
+  <xacro:macro name="ft_sensor_plugin" params="name joint_name noise:=0.03 rate:=500">
+  <gazebo>
+    <plugin name="${name}ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+      <updateRate>${rate}</updateRate>
+      <topicName>${name}/ft_sensor</topicName> 
+      <jointName>${joint_name}</jointName>
+      <always_on>true</always_on>
+      <noise>
+        <type>gaussian</type>
+        <mean>0.0</mean>
+        <stddev>${noise}</stddev>  
+      </noise>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="${joint_name}">
+    <provideFeedback>true</provideFeedback>
+  </gazebo>
+</xacro:macro>
+
 </root>

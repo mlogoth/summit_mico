@@ -1,0 +1,45 @@
+
+#########
+## MM1 ##
+#########
+$(arg robot_1_prefix)_platform_state_controller:
+  type: summit_mico_control/platform_state_controller
+  joints: [ $(arg robot_1_prefix)_platform_prismatic_x, $(arg robot_1_prefix)_platform_prismatic_y, $(arg robot_1_prefix)_platform_continuous_z]
+  mode: $(arg robot_1_platform)
+  odom_frame: $(arg robot_1_prefix)_odom
+  base_frame: $(arg robot_1_prefix)_base_footprint
+  command_topic: $(arg robot_1_prefix)/robotnik_base_control/cmd_vel
+  odom_topic: $(arg robot_1_prefix)/robotnik_base_control/odom
+  publish_odom: true
+
+
+
+#########
+## MM2 ##
+#########
+$(arg robot_2_prefix)_platform_state_controller:
+  type: summit_mico_control/platform_state_controller
+  joints: [ $(arg robot_2_prefix)_platform_prismatic_x, $(arg robot_2_prefix)_platform_prismatic_y, $(arg robot_2_prefix)_platform_continuous_z]
+  mode: $(arg robot_2_platform)
+  odom_frame: $(arg robot_2_prefix)_odom
+  base_frame: $(arg robot_2_prefix)_base_footprint
+  command_topic: $(arg robot_2_prefix)/robotnik_base_control/cmd_vel
+  odom_topic: $(arg robot_2_prefix)/robotnik_base_control/odom
+  publish_odom: true
+
+
+
+#########
+## MM3 ##
+#########
+
+$(arg robot_3_prefix)_platform_state_controller:
+  type: summit_mico_control/platform_state_controller
+  joints: [ $(arg robot_3_prefix)_platform_prismatic_x, $(arg robot_3_prefix)_platform_prismatic_y, $(arg robot_3_prefix)_platform_continuous_z]
+  mode: $(arg robot_3_platform)
+  odom_frame: $(arg robot_3_prefix)_odom
+  base_frame: $(arg robot_3_prefix)_base_footprint
+  command_topic: $(arg robot_3_prefix)/robotnik_base_control/cmd_vel
+  odom_topic: $(arg robot_3_prefix)/robotnik_base_control/odom
+  publish_odom: true
+

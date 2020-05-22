@@ -1,0 +1,408 @@
+<?xml version="1.0"?>
+<robot name="summit_mico_cooperative" 
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="agents" default="3"/>
+
+    <xacro:arg name="robot_1_prefix" default="mm1_"/>
+    <xacro:arg name="robot_2_prefix" default="mm2_"/>
+    <xacro:arg name="robot_3_prefix" default="mm3_"/>
+
+    <xacro:arg name="platform_mode_1" default="omni"/>
+    <xacro:arg name="platform_mode_2" default="diff"/>
+    <xacro:arg name="platform_mode_3" default="omni"/>
+
+    <xacro:arg name="arm_interface_1" default="velocity"/>
+    <xacro:arg name="arm_interface_2" default="velocity"/>
+    <xacro:arg name="arm_interface_3" default="velocity"/>
+
+    <xacro:arg name="camera_1" default="true"/>
+    <xacro:arg name="camera_2" default="false"/>
+    <xacro:arg name="camera_3" default="true"/>
+
+    <xacro:arg name="color_1" default="None"/>
+    <xacro:arg name="color_2" default="default"/>
+    <xacro:arg name="color_3" default="red"/>
+
+    <xacro:arg name="type" default="box"/>
+    <xacro:arg name="mass" default="1"/>
+    <xacro:arg name="height" default="1.6"/>
+    <xacro:arg name="length" default="2.6"/>
+    <xacro:arg name="width" default="0.06"/>
+
+    <xacro:arg name="dx2" default="0"/>
+    <xacro:arg name="theta2" default="0"/>
+    <xacro:arg name="dx3" default="0"/>
+    <xacro:arg name="theta3" default="0"/>
+
+
+
+    <xacro:arg name="robot_1_dic" default="dict(prefix='$(arg robot_1_prefix)', platform_mode='$(arg platform_mode_1)', arm_interface='$(arg arm_interface_1)', camera='$(arg camera_1)', color='$(arg color_1)')"/>
+    <xacro:arg name="robot_2_dic" default="dict(prefix='$(arg robot_2_prefix)', platform_mode='$(arg platform_mode_2)', arm_interface='$(arg arm_interface_2)', camera='$(arg camera_2)', color='$(arg color_2)')"/>
+    <xacro:arg name="robot_3_dic" default="dict(prefix='$(arg robot_3_prefix)', platform_mode='$(arg platform_mode_3)', arm_interface='$(arg arm_interface_3)', camera='$(arg camera_3)', color='$(arg color_3)')"/>
+
+    <xacro:arg name="object_dic" default="dict(type='$(arg type)', mass=$(arg mass), object_length=$(arg length), object_height=$(arg height), object_width=$(arg width))"/>
+
+    <xacro:arg name="robot_props" default="dict(dx_2=$(arg dx2), dx_3=$(arg dx3), theta_2=$(arg theta2), theta_3=$(arg theta3))"/>
+
+
+    <xacro:property name="robot_props" value="${$(arg robot_props)}"/>
+
+    <!-- Math Properties -->
+    <xacro:property name="robot_radius" value="0.807"/>
+    <xacro:property name="link6_to_ee" value="0.160"/>
+    <!-- base link -> end effector-->
+
+
+
+    <!-- Load A Yaml File with URDF properties -->
+    <!-- <xacro:property name="yaml_file" value="$(find summit_mico_gazebo)/launch/cooperative_robot_properties.yaml" />
+    <xacro:property name="props" value="${load_yaml(yaml_file)}"/> -->
+
+    <!-- Load Properties for Each Robot & Object-->
+
+    <!-- Robot 1 Properties Dictionary -->
+    <xacro:if value="${$(arg agents)}">
+        <xacro:property name="robot_1" value="${$(arg robot_1_dic)}"/>
+    </xacro:if>
+
+    <!-- Robot 2 Properties Dictionary if set agents > 1-->
+    <xacro:property name="theta_2" value="${robot_props['theta_2']}"/>
+    <xacro:if value="${$(arg agents)-1}">
+        <xacro:property name="robot_2" value="${$(arg robot_2_dic)}"/>
+        <!-- If no properties are set then initiate with zero values -->
+        <xacro:if value="${theta_2 == None}">
+            <xacro:property name="theta_2" value="0"/>
+        </xacro:if>
+        <xacro:property name="dx_2" value="${robot_props['dx_2']}"/>
+        <xacro:if value="${dx_2 == None}">
+            <xacro:property name="dx_2" value="0"/>
+        </xacro:if>
+    </xacro:if>
+
+
+
+    <!-- Robot 3 Properties Dictionary if set agents > 2 -->
+    <xacro:property name="theta_3" value="${robot_props['theta_3']}"/>
+    <xacro:if value="${$(arg agents)-2}">
+        <xacro:property name="robot_3" value="${$(arg robot_3_dic)}"/>
+        <xacro:property name="theta_3" value="${robot_props['theta_3']}"/>
+        <!-- If no properties are set then initiate with zero values -->
+        <xacro:if value="${theta_3 == None}">
+            <xacro:property name="theta_3" value="0"/>
+        </xacro:if>
+        <xacro:property name="dx_3" value="${robot_props['dx_3']}"/>
+        <xacro:if value="${dx_3 == None}">
+            <xacro:property name="dx_3" value="0"/>
+        </xacro:if>
+    </xacro:if>
+
+    <!-- Object Properties Dictionary -->
+    <xacro:property name="object" value="${$(arg object_dic)}"/>
+    <xacro:property name="object_length" value="1.6"/>
+    <xacro:property name="object_height" value="2.0"/>
+    <xacro:property name="object_width" value="0.06"/>
+    <!-- If parameters are defined then set them -->
+    <xacro:unless value="${object['object_length'] == None}">
+        <xacro:property name="object_length" value="${object['object_length']}"/>
+    </xacro:unless>
+    <xacro:unless value="${object['object_height'] == None}">
+        <xacro:property name="object_height" value="${object['object_height']}"/>
+    </xacro:unless>
+    <xacro:unless value="${object['object_width'] == None}">
+        <xacro:property name="object_width" value="${object['object_width']}"/>
+    </xacro:unless>
+
+
+    <!-- Calculate Robot-2 and Robot-3 initial poses -->
+    <xacro:property name="robot_2_x" value="${dx_2}"/>
+    <xacro:property name="robot_2_y" value="${robot_radius+object_length/2-0.02}"/>
+    <xacro:property name="robot_3_x" value="0.0"/>
+    <xacro:property name="robot_3_y" value="${robot_radius+object_length/2-0.02}"/>
+
+    <!-- If Object Type = Box then theta variable cannot be defined -->
+    <xacro:if value="${object['type'] == 'box'}">
+        <xacro:property name="theta_2" value="0"/>
+        <xacro:property name="theta_3" value="0"/>
+        <xacro:if value="${$(arg agents) == 3}">
+            <xacro:property name="robot_2_x" value="${object_height/4+dx_2}"/>
+            <xacro:property name="robot_3_x" value="${-(object_height/4+dx_3)}"/>
+        </xacro:if>
+    </xacro:if>
+
+    <!-- Object is Cylinder -->
+    <xacro:if value="${object['type'] == 'cylinder'}">
+        <xacro:property name="dx_2" value="0"/>
+        <xacro:property name="dx_3" value="0"/>
+        <!-- Check if Agents == 3 and has the same theta -->
+        <xacro:if value="${theta_2 == theta_3 and $(arg agents) == 3 }">
+            <xacro:if value="${theta_2 == 0}">
+                <xacro:property name="theta_2" value="${radians(30)}"/>
+            </xacro:if>
+            <xacro:property name="theta_3" value="${pi-theta_2}"/>
+        </xacro:if>
+        <xacro:if value="${theta_2 == 0}">
+            <xacro:property name="robot_2_yaw" value="${radians(theta_2)}"/>
+            <xacro:property name="robot_2_x" value="0.0"/>
+            <xacro:property name="robot_2_y" value="${(object_length/2 + robot_radius-0.02)}"/>
+        </xacro:if>
+        <xacro:unless value="${theta_2 == 0}">
+            <xacro:property name="robot_2_yaw" value="${radians(theta_2)}"/>
+            <xacro:property name="robot_2_x" value="${cos(robot_2_yaw)*(object_length/2 + robot_radius-0.02)}"/>
+            <xacro:property name="robot_2_y" value="${sin(robot_2_yaw)*(object_length/2 + robot_radius-0.02)}"/>
+        </xacro:unless>
+        <xacro:if value="${theta_3 == 0}">
+            <xacro:property name="robot_3_yaw" value="${radians(theta_3)}"/>
+            <xacro:property name="robot_3_x" value="0.0"/>
+            <xacro:property name="robot_3_y" value="${(object_length/2 + robot_radius-0.02)}"/>
+        </xacro:if>
+        <xacro:unless value="${theta_3 == 0}">
+            <xacro:property name="robot_3_yaw" value="${radians(theta_3)}"/>
+            <xacro:property name="robot_3_x" value="${cos(robot_3_yaw)*(object_length/2 + robot_radius-0.02)}"/>
+            <xacro:property name="robot_3_y" value="${sin(robot_3_yaw)*(object_length/2 + robot_radius-0.02)}"/>
+        </xacro:unless>
+
+    </xacro:if>
+
+
+
+
+    <!-- </xacro:if> -->
+
+
+    <!-- Import Summit Mico root -->
+    <xacro:include filename="$(find summit_mico_description)/robots/summit_mico_root.xacro" />
+
+    <!-- Add Gazebo World Link -->
+    <link name="world"/>
+
+    <!-- First Robot -->
+    <xacro:summit_mico prefix="${robot_1['prefix']}" platform_mode="${robot_1['platform_mode']}" arm_interface="${robot_1['arm_interface']}" color="${robot_1['color']}" camera="${robot_1['camera']}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:summit_mico>
+
+
+    <!-- Attach Robot 1 to Gazebo World -->
+    <joint name="${robot_1['prefix']}to_world" type="fixed">
+        <origin rpy="0 0 1.57" xyz="0 -${robot_radius+object_length/2-0.02} 0"/>
+        <parent link="world"/>
+        <child link="${robot_1['prefix']}world"/>
+    </joint>
+
+    <xacro:ft_sensor_plugin name="${robot_1['prefix']}mico_joint_6" joint_name="${robot_1['prefix']}mico_joint_6" />
+
+    <xacro:if value="true">
+        <!-- Object Link -->
+        <link name="object">
+            <visual>
+                <geometry>
+                    <xacro:if value="${object['type'] == 'cylinder'}">
+                        <cylinder length="${object_width}" radius="${object_length/2}"/>
+                    </xacro:if>
+                    <xacro:if value="${object['type'] == 'box'}">
+                        <box size="${object_height} ${object_length} ${object_width}"/>
+                    </xacro:if>
+                </geometry>
+                <material name="orange"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <xacro:if value="${object['type'] == 'cylinder'}">
+                        <cylinder length="${object_width}" radius="${object_length/1.2}"/>
+                    </xacro:if>
+                    <xacro:if value="${object['type'] == 'box'}">
+                        <box size="${object_height/2} ${object_length/2} ${object_width}"/>
+                    </xacro:if>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="${object['mass']}"/>
+                <xacro:if value="${object['type'] == 'cylinder'}">
+                    <xacro:inertia_cylinder radius="${object_length}" height="${object_width}" mass="${object['mass']}"/>
+                </xacro:if>
+                <xacro:if value="${object['type'] == 'box'}">
+                    <xacro:inertia_box height="${object_length}" mass="${object['mass']}"/>
+                </xacro:if>
+            </inertial>
+            <gazebo reference="object">
+                <material>Gazebo/Orange</material>
+            </gazebo>
+        </link>
+
+
+
+        <!-- Attach Object to Robot 1 End effector -->
+        <joint name="${robot_1['prefix']}to_object" type="fixed">
+            <origin rpy="-1.573 0 0" xyz="0.07 0.0  -${object_length/2 - 0.02 + link6_to_ee}"/>
+            <parent link="${robot_1['prefix']}mico_link_6"/>
+            <child link="object"/>
+        </joint>
+        <!-- <joint name="${robot_1['prefix']}to_object" type="fixed">
+            <origin rpy="1.573 0 1.573" xyz="0.0 0.07 ${object_length/2 - 0.02}"/>
+            <parent link="${robot_1['prefix']}mico_end_effector"/>
+            <child link="object"/>
+        </joint> -->
+    </xacro:if>
+
+
+
+    <!-- Second Robot -->
+    <xacro:if value="${$(arg agents) >= 2}">
+
+        <!-- Attach Robot 1 to Gazebo World -->
+        <joint name="${robot_2['prefix']}to_world" type="fixed">
+            <xacro:if value="${theta_2 != 0}">
+                <origin rpy="0 0 -${pi - radians(theta_2)}" xyz="${robot_2_x} ${robot_2_y} 0"/>
+            </xacro:if>
+            <xacro:unless value="${theta_2 != 0}">
+                <origin rpy="0 0 -1.57" xyz="${robot_2_x} ${robot_2_y} 0"/>
+            </xacro:unless>
+            <parent link="world"/>
+            <child link="${robot_2['prefix']}world"/>
+        </joint>
+
+        <xacro:summit_mico prefix="${robot_2['prefix']}" platform_mode="${robot_2['platform_mode']}" arm_interface="${robot_2['arm_interface']}" color="${robot_2['color']}" camera="${robot_2['camera']}" gazebo_ros_control="false">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:summit_mico>
+
+        <!-- Attach Gazebo Joint for Closed Chain to connect Robot_2 End Effector -> object -->
+        <xacro:if value="${robot_2['platform_mode'] == robot_1['platform_mode']}">
+            <xacro:property name="x" value="0.0"/>
+        </xacro:if>
+        <xacro:unless value="${robot_2['platform_mode'] == robot_1['platform_mode']}">
+            <xacro:if value="${robot_1['platform_mode'] == 'omni'}">
+                <xacro:property name="x" value="0.017"/>
+            </xacro:if>
+            <xacro:unless value="${robot_1['platform_mode'] == 'omni'}">
+                <xacro:property name="x" value="-0.017"/>
+            </xacro:unless>
+        </xacro:unless>
+
+        <!-- <gazebo>
+            <joint name="${robot_2['prefix']}to_object" type="fixed">
+                <parent>${robot_2['prefix']}mico_end_effector</parent>
+                <child>object</child>
+                <xacro:if value="${object['type']  == 'cylinder'}">
+                    <xacro:if value="${theta_2 == 0}">
+                        <pose>x ${dx_2+0.065} ${object_length/2-0.02} -1.576 0 -1.573</pose>
+                    </xacro:if>
+                    <xacro:if value="${theta_2 > 0}">
+                        <pose>x ${dx_2+0.065} ${object_length/2-0.02} -1.576 ${pi/2 - radians(theta_2)} -1.573</pose>
+                    </xacro:if>
+                    <xacro:unless value="${theta_2 > 0}">
+                        <pose>x ${dx_2+0.065} ${object_length/2-0.02} 1.576 ${pi/2 - radians(theta_2)} 1.573</pose>
+                    </xacro:unless>
+                </xacro:if>
+                <xacro:if value="${object['type']  == 'box'}">
+                    <pose>${x} ${robot_2_x+0.065} ${object_length/2-0.02} -1.576 0 -1.573</pose>
+                </xacro:if>
+            </joint>
+        </gazebo> -->
+
+        <gazebo>
+            <joint name="${robot_2['prefix']}to_object" type="fixed">
+                <parent>${robot_2['prefix']}mico_link_6</parent>
+                <child>object</child>
+                <xacro:if value="${object['type']  == 'cylinder'}">
+                    <xacro:if value="${theta_2 == 0}">
+                        <pose> ${dx_2+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} 1.565 0 -3.14</pose>
+                    </xacro:if>
+                    <xacro:if value="${theta_2 > 0}">
+                        <pose>${dx_2+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} 1.576 -${pi/2 - radians(theta_2)} -3.14</pose>
+                    </xacro:if>
+                    <xacro:unless value="${theta_2 > 0}">
+                        <pose> ${dx_2+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} -1.576 ${-pi/2 - radians(theta_2)} 0.0</pose>
+                    </xacro:unless>
+                </xacro:if>
+                <xacro:if value="${object['type']  == 'box'}">
+                    <pose>${robot_2_x+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} -1.565 0 -3.14</pose>
+                    <!-- <pose>0.464 0.017 ${object_length/2-0.02+ link6_to_ee} -1.565 0 -3.14</pose> -->
+                </xacro:if>
+            </joint>
+
+        </gazebo>
+
+        <xacro:ft_sensor_plugin name="${robot_2['prefix']}mico_joint_6" joint_name="${robot_2['prefix']}mico_joint_6" />
+
+
+    </xacro:if>
+
+
+    <!-- Third Robot -->
+    <xacro:if value="${$(arg agents) == 3}">
+
+        <!-- Attach Robot 1 to Gazebo World -->
+        <joint name="${robot_3['prefix']}to_world" type="fixed">
+            <xacro:if value="${theta_3 != 0}">
+                <origin rpy="0 0 -${pi - radians(theta_3)}" xyz="${robot_3_x} ${robot_3_y} 0"/>
+            </xacro:if>
+            <xacro:unless value="${theta_3 != 0}">
+                <origin rpy="0 0 -1.57" xyz="${robot_3_x} ${robot_3_y} 0"/>
+            </xacro:unless>
+            <parent link="world"/>
+            <child link="${robot_3['prefix']}world"/>
+        </joint>
+
+
+        <xacro:summit_mico prefix="${robot_3['prefix']}" platform_mode="${robot_3['platform_mode']}" arm_interface="${robot_3['arm_interface']}" color="${robot_3['color']}" camera="${robot_3['camera']}" gazebo_ros_control="false">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:summit_mico>
+
+
+        <!-- Attach Gazebo Joint for Closed Chain to connect Robot_2 End Effector -> object -->
+        <xacro:if value="${robot_3['platform_mode'] == robot_1['platform_mode']}">
+            <xacro:property name="x" value="0.0"/>
+        </xacro:if>
+        <xacro:unless value="${robot_3['platform_mode'] == robot_1['platform_mode']}">
+            <xacro:if value="${robot_1['platform_mode'] == 'omni'}">
+                <xacro:property name="x" value="0.017"/>
+            </xacro:if>
+            <xacro:unless value="${robot_1['platform_mode'] == 'omni'}">
+                <xacro:property name="x" value="-0.017"/>
+            </xacro:unless>
+        </xacro:unless>
+        <!-- Attach Gazebo Joint for Closed Chain to connect Robot_2 End Effector -> object -->
+
+        <!--
+            <joint name="${robot_3['prefix']}to_object" type="fixed">
+                <parent>${robot_3['prefix']}mico_end_effector</parent>
+                <child>object</child>
+                <xacro:if value="${object['type']  == 'cylinder'}">
+                    <xacro:if value="${theta_3 >= 0}">
+                        <pose>x ${dx_3+0.065} ${object_length/2-0.02} -1.576 ${pi/2 - radians(theta_3)} -1.573</pose>
+                    </xacro:if>
+                    <xacro:unless value="${theta_3 >= 0}">
+                        <pose>x ${dx_3+0.065} ${object_length/2-0.02} 1.576 ${pi/2 - radians(theta_3)} 1.573</pose>
+                    </xacro:unless>
+                </xacro:if>
+                <xacro:if value="${object['type']  == 'box'}">
+                    <pose>${x} ${robot_3_x+0.065} ${object_length/2-0.02} -1.576 0 -1.573</pose>
+                </xacro:if>
+            </joint>
+                -->
+        <gazebo>
+            <joint name="${robot_3['prefix']}to_object" type="fixed">
+                <parent>${robot_3['prefix']}mico_link_6</parent>
+                <child>object</child>
+                <xacro:if value="${object['type']  == 'cylinder'}">
+                    <xacro:if value="${theta_3 == 0}">
+                        <pose> ${dx_3+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} 1.565 0 -3.14</pose>
+                    </xacro:if>
+                    <xacro:if value="${theta_3 > 0}">
+                        <pose>${dx_3+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} 1.576 -${pi/2 - radians(theta_3)} -3.14</pose>
+                    </xacro:if>
+                    <xacro:unless value="${theta_3 > 0}">
+                        <pose> ${dx_3+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} -1.576 ${-pi/2 - radians(theta_3)} 0.0</pose>
+                    </xacro:unless>
+                </xacro:if>
+                <xacro:if value="${object['type']  == 'box'}">
+                    <pose>${robot_3_x+0.065} ${x} -${object_length/2-0.02+ link6_to_ee} -1.565 0 -3.14</pose>
+                </xacro:if>
+            </joint>
+        </gazebo>
+
+        <xacro:ft_sensor_plugin name="${robot_3['prefix']}mico_joint_6" joint_name="${robot_3['prefix']}mico_joint_6" />
+
+    </xacro:if>
+</robot>
+

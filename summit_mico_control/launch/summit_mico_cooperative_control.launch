@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<launch>
+
+
+    <arg name="agents" default= "2"/>
+    <!-- namespace prefix -->
+    <arg name="robot_1_prefix" default="mm1"/>
+    <arg name="robot_2_prefix" default="mm2"/>
+    <arg name="robot_3_prefix" default="mm3"/>
+
+    <!-- platform kinematic mode -->
+    <arg name="robot_1_platform" default="omni"/>
+    <arg name="robot_2_platform" default="omni"/>
+    <arg name="robot_3_platform" default="omni"/>
+
+    <!-- joint interface ros -->
+    <arg name="robot_1_interface" default="velocity"/>
+    <arg name="robot_2_interface" default="velocity"/>
+    <arg name="robot_3_interface" default="velocity"/>
+
+    <!-- Use ros joint trajectory controller -->
+    <arg name="robot_1_trajectory" default="false"/>
+    <arg name="robot_2_trajectory" default="false"/>
+    <arg name="robot_3_trajectory" default="false"/>
+
+
+    <!-- Now choose the proper controllers -->
+    <arg name="robot_1_platform_controller" value="$(arg robot_1_prefix)_platform_state_controller" if="$(eval arg('agents') >= 1 )"/>
+    <arg name="robot_1_platform_controller" value="" unless="$(eval arg('agents') >= 1 )"/>
+    <arg name="robot_1_arm_controller" value="$(arg robot_1_prefix)_$(arg robot_1_interface)_joint_trajectory_controller" if="$(eval arg('agents') >= 1 and arg('robot_1_trajectory'))"/>
+    <arg name="robot_1_arm_controller" value="" unless="$(eval arg('agents') >= 1 and arg('robot_1_trajectory'))"/>
+
+
+    <arg name="robot_2_platform_controller" value="$(arg robot_2_prefix)_platform_state_controller" if="$(eval arg('agents') >= 2 )"/>
+    <arg name="robot_2_platform_controller" value="" unless="$(eval arg('agents') >= 2 )"/>
+    <arg name="robot_2_arm_controller" value="$(arg robot_2_prefix)_$(arg robot_2_interface)_joint_trajectory_controller" if="$(eval arg('agents') >= 2 and arg('robot_2_trajectory'))"/>
+    <arg name="robot_2_arm_controller" value="" unless="$(eval arg('agents') >= 2 and arg('robot_2_trajectory'))"/>
+
+
+
+    <arg name="robot_3_platform_controller" value="$(arg robot_3_prefix)_platform_state_controller" if="$(eval arg('agents') == 3 )"/>
+    <arg name="robot_3_platform_controller" value="" unless="$(eval arg('agents') == 3 )"/>
+    <arg name="robot_3_arm_controller" value="$(arg robot_3_prefix)_$(arg robot_3_interface)_joint_trajectory_controller" if="$(eval arg('agents') == 3 and arg('robot_3_trajectory'))"/>
+    <arg name="robot_3_arm_controller" value="" unless="$(eval arg('agents') == 3 and arg('robot_3_trajectory'))"/>
+
+
+
+    <!-- LOAD CONTROLLERS -->
+    <rosparam file="$(find summit_mico_control)/config/cooperative_mico_gazebo_control.yaml" command="load" subst_value="true"/>
+    <rosparam file="$(find summit_mico_control)/config/cooperative_summit_gazebo_control.yaml" command="load" subst_value="true"/>
+
+
+    <!-- Spawn the proper controllers -->
+    <node name="mico_trajectory_controllers_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+    joint_state_controller
+    $(arg robot_1_platform_controller)
+    $(arg robot_1_arm_controller)
+    $(arg robot_2_platform_controller)
+    $(arg robot_2_arm_controller)
+    $(arg robot_3_platform_controller)
+    $(arg robot_3_arm_controller)
+     "/>
+
+    <!-- Robot state publisher -->
+    <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="200.0"/>
+    </node>
+
+
+
+</launch>
+

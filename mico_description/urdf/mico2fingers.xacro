@@ -25,9 +25,12 @@
     <xacro:include filename="$(find mico_description)/urdf/micoproperties.xacro" />
 
 
-    <xacro:macro name="mico2fingers" params="base_parent robot_control_ns:='' prefix:='mico' interface:=velocity color:='None' J1_offset:=0.0 J2_offset:=0.0 J3_offset:=0.0 J4_offset:=0.0 J5_offset:=0.0 J6_offset:=0.0">
+    <xacro:macro name="mico2fingers" params="base_parent robot_control_ns:='' prefix:='mico' interface:=velocity color:='None' J1_offset:=0.0 J2_offset:=0.0 J3_offset:=0.0 J4_offset:=0.0 J5_offset:=0.0 J6_offset:=0.0 gazebo_ros_control:=true">
 
-        <xacro:gazebo_config robot_namespace="${robot_control_ns}"/>
+        <xacro:if value="${gazebo_ros_control}">
+            <xacro:gazebo_config robot_namespace="${robot_control_ns}"/>
+        </xacro:if>
+
 
         <xacro:kinova_armlink link_name="${prefix}_link_base" link_mesh="${link_base_mesh}" mesh_no="${link_base_mesh_no}"/>
         <xacro:kinova_armjoint joint_name="${prefix}_joint_base" type="${joint_base_type}" parent="${base_parent}" child="${prefix}_link_base" joint_axis_xyz="${joint_base_axis_xyz}" joint_origin_xyz="${joint_base_origin_xyz}" joint_origin_rpy="${joint_base_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0" joint_velocity_limit="0" joint_torque_limit="0" fixed="true"/>
@@ -92,14 +95,14 @@
             <xacro:kinova_armjoint joint_name="${prefix}_joint_6" type="${joint_6_type}" parent="${prefix}_virtual_link_6" child="${prefix}_link_6" joint_axis_xyz="${joint_6_axis_xyz}" joint_origin_xyz="0 0 0" joint_origin_rpy="0.0 0.0 ${J6_offset}" joint_lower_limit="${joint_6_lower_limit-J6_offset}" joint_upper_limit="${joint_6_upper_limit-J6_offset}" joint_velocity_limit="${joint_6_velocity_limit}" joint_torque_limit="${joint_6_torque_limit}" interface="${interface}"/>
         </xacro:unless>
 
-    
+
         <xacro:unless value="${color == 'None'}">
             <xacro:gazebo_materials prefix="${prefix}" color="${color}"/>
         </xacro:unless>
 
         <xacro:kinova_virtual_link link_name="${prefix}_end_effector"/>
         <xacro:kinova_virtual_joint joint_name="${prefix}_joint_end_effector" type="${joint_end_effector_type}" parent="${prefix}_link_6" child="${prefix}_end_effector" joint_axis_xyz="${joint_end_effector_axis_xyz}" joint_origin_xyz="${joint_end_effector_origin_xyz}" joint_origin_rpy="${joint_end_effector_origin_rpy}" joint_lower_limit="0" joint_upper_limit="0"/>
-        <xacro:kinova_2fingers link_hand="${prefix}_link_6" prefix="${prefix}_" fixed="true"/> 
+        <xacro:kinova_2fingers link_hand="${prefix}_link_6" prefix="${prefix}_" fixed="true"/>
     </xacro:macro>
 
 
