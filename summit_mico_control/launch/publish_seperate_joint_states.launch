@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_prefix" default="mm1"/>
+    <arg name="use_namespace" default="false"/>
+
+    <group if="$(arg use_namespace)">
+        <group ns="$(arg robot_prefix)">
+            <rosparam file="$(find summit_mico_control)/config/publish_seperate_joint_states.yaml" command="load" subst_value="true"/>
+            <!-- Spawn the proper controllers -->
+            <node name="$(arg robot_prefix)" pkg="summit_mico_control" type="pub_seperate_joint_state" respawn="false" output="screen" />
+        </group>
+    </group>
+    <group unless="$(arg use_namespace)">
+        <rosparam file="$(find summit_mico_control)/config/publish_seperate_joint_states.yaml" command="load" subst_value="true"/>
+        <!-- Spawn the proper controllers -->
+        <node name="$(arg robot_prefix)" pkg="summit_mico_control" type="pub_seperate_joint_state" respawn="false" output="screen" />
+    </group>
+</launch>
+

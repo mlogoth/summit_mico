@@ -82,7 +82,7 @@
 
 
 
-    <!-- Robot 3 Properties Dictionary if set agents > 2 -->
+    <!-- Robot 3 Properties Dictionary if set agents 2 -->
     <xacro:property name="theta_3" value="${robot_props['theta_3']}"/>
     <xacro:if value="${$(arg agents)-2}">
         <xacro:property name="robot_3" value="${$(arg robot_3_dic)}"/>
@@ -177,7 +177,7 @@
     <link name="world"/>
 
     <!-- First Robot -->
-    <xacro:summit_mico prefix="${robot_1['prefix']}" platform_mode="${robot_1['platform_mode']}" arm_interface="${robot_1['arm_interface']}" color="${robot_1['color']}" camera="${robot_1['camera']}">
+    <xacro:summit_mico prefix="${robot_1['prefix']}" platform_mode="${robot_1['platform_mode']}" arm_interface="${robot_1['arm_interface']}" color="${robot_1['color']}" camera="${robot_1['camera']}" platform_interface="effort">
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:summit_mico>
 
@@ -191,17 +191,28 @@
 
     <xacro:ft_sensor_plugin name="${robot_1['prefix']}mico_joint_6" joint_name="${robot_1['prefix']}mico_joint_6" />
 
-    <xacro:if value="true">
+    <xacro:property name="use_object" value="true"/>
+    <xacro:if value="${object['mass'] == 0 and $(arg agents) == 1}">
+        <xacro:property name="use_object" value="false"/>
+    </xacro:if>
+    <xacro:if value="${use_object}">
         <!-- Object Link -->
         <link name="object">
             <visual>
+                <!-- <origin xyz="0.22 0 0.05" rpy="3.14 0 0" /> -->
                 <geometry>
+
                     <xacro:if value="${object['type'] == 'cylinder'}">
                         <cylinder length="${object_width}" radius="${object_length/2}"/>
                     </xacro:if>
+                    <!-- <xacro:if value="${object['type'] == 'box'}">
+                        <box size="${object_height} ${object_length} ${object_width}"/>
+                    </xacro:if> -->
                     <xacro:if value="${object['type'] == 'box'}">
                         <box size="${object_height} ${object_length} ${object_width}"/>
+                        <!-- <mesh filename="package://summit_mico_description/meshes/objects/plate.stl" scale=".013 0.015 0.015"/> -->
                     </xacro:if>
+
                 </geometry>
                 <material name="orange"/>
             </visual>
@@ -224,10 +235,12 @@
                     <xacro:inertia_box height="${object_length}" mass="${object['mass']}"/>
                 </xacro:if>
             </inertial>
-            <gazebo reference="object">
-                <material>Gazebo/Orange</material>
-            </gazebo>
         </link>
+        <gazebo reference="object">
+            <material>Gazebo/Orange</material>
+            <kp value="10.0" />
+            <kd value="100000.0" />
+        </gazebo>
 
 
 
@@ -405,4 +418,3 @@
 
     </xacro:if>
 </robot>
-

@@ -7,7 +7,7 @@
     <!--  -->
     <xacro:include filename="$(find mico_description)/urdf/mico2fingers.xacro" />
 
-    <xacro:macro name="summit_mico" params="prefix *origin platform_mode:='omni' arm_interface:='velocity' color:='None' camera:=true gazebo_ros_control:=true">
+    <xacro:macro name="summit_mico" params="prefix *origin platform_mode:='omni' arm_interface:='velocity' color:='None' camera:=true gazebo_ros_control:=true platform_interface:='velocity'">
 
         <xacro:if value="${platform_mode in ['omni', 'force_omni', 'force', 'Omni']}">
             <xacro:property name="kin_mode" value="force_omni"/>
@@ -16,7 +16,7 @@
             <xacro:property name="kin_mode" value="force_diff"/>
         </xacro:unless>
 
-        <xacro:summit_xl_robot prefix="${prefix}" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false" publish_tf="false" virtual_platform_joints="true">
+        <xacro:summit_xl_robot prefix="${prefix}" kinematic_model="${kin_mode}" kinect="${camera}" mini_pc="true" enable_ros_control="false" publish_tf="false" virtual_platform_joints="true" interface="${platform_interface}">
             <xacro:insert_block name="origin" />
         </xacro:summit_xl_robot>
 
@@ -30,7 +30,7 @@
         <link name="${prefix}root">
             <inertial>
                 <mass value="1"/>
-                <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+                <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
             </inertial>
         </link>
         <joint name="${prefix}connect_root_and_summit" type="fixed">
@@ -83,4 +83,3 @@
 
 
 </robot>
-

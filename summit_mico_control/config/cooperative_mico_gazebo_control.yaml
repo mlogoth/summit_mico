@@ -9,7 +9,7 @@ joint_names: [*mm1_joint_names,*mm2_joint_names, *mm3_joint_names]
 
 
 joint_state_controller:
-  publish_rate: 200
+  publish_rate: 500
   type: joint_state_controller/JointStateController
 
 
@@ -93,6 +93,37 @@ $(arg robot_1_prefix)_effort_joint_trajectory_controller:
     - $(arg robot_1_prefix)_mico_joint_6
     type: effort_controllers/JointTrajectoryController
 
+
+
+$(arg robot_1_prefix)_position_joint_trajectory_controller:
+    constraints:
+      goal_time: 1.0
+      $(arg robot_1_prefix)_mico_joint_1: *joint_constraints #{goal: 0.02, trajectory: 0.05}
+      $(arg robot_1_prefix)_mico_joint_2: *joint_constraints
+      $(arg robot_1_prefix)_mico_joint_3: *joint_constraints
+      $(arg robot_1_prefix)_mico_joint_4: *joint_constraints
+      $(arg robot_1_prefix)_mico_joint_5: *joint_constraints
+      $(arg robot_1_prefix)_mico_joint_6: *joint_constraints
+      stopped_velocity_tolerance: 0.02
+    gains:
+      $(arg robot_1_prefix)_mico_joint_1: *mico_joint_gains1 
+      $(arg robot_1_prefix)_mico_joint_2: *mico_joint_gains1
+      $(arg robot_1_prefix)_mico_joint_3: *mico_joint_gains1
+      $(arg robot_1_prefix)_mico_joint_4: *mico_joint_gains2 
+      $(arg robot_1_prefix)_mico_joint_5: *mico_joint_gains2
+      $(arg robot_1_prefix)_mico_joint_6: *mico_joint_gains2
+    joints:
+    - $(arg robot_1_prefix)_mico_joint_1
+    - $(arg robot_1_prefix)_mico_joint_2
+    - $(arg robot_1_prefix)_mico_joint_3
+    - $(arg robot_1_prefix)_mico_joint_4
+    - $(arg robot_1_prefix)_mico_joint_5
+    - $(arg robot_1_prefix)_mico_joint_6
+    type: position_controllers/JointTrajectoryController
+
+
+
+
 ##########
 ##  MM2 ##
 ##########
@@ -138,6 +169,36 @@ $(arg robot_2_prefix)_velocity_joint_trajectory_controller:
     - $(arg robot_2_prefix)_mico_joint_5
     - $(arg robot_2_prefix)_mico_joint_6
     type: velocity_controllers/JointTrajectoryController
+
+
+$(arg robot_2_prefix)_position_joint_trajectory_controller:
+    constraints:
+      goal_time: 1.0
+      $(arg robot_2_prefix)_mico_joint_1: *joint_constraints #{goal: 0.02, trajectory: 0.05}
+      $(arg robot_2_prefix)_mico_joint_2: *joint_constraints
+      $(arg robot_2_prefix)_mico_joint_3: *joint_constraints
+      $(arg robot_2_prefix)_mico_joint_4: *joint_constraints
+      $(arg robot_2_prefix)_mico_joint_5: *joint_constraints
+      $(arg robot_2_prefix)_mico_joint_6: *joint_constraints
+      stopped_velocity_tolerance: 0.02
+    gains:
+      $(arg robot_2_prefix)_mico_joint_1: *mico_joint_gains1 
+      $(arg robot_2_prefix)_mico_joint_2: *mico_joint_gains1
+      $(arg robot_2_prefix)_mico_joint_3: *mico_joint_gains1
+      $(arg robot_2_prefix)_mico_joint_4: *mico_joint_gains2 
+      $(arg robot_2_prefix)_mico_joint_5: *mico_joint_gains2
+      $(arg robot_2_prefix)_mico_joint_6: *mico_joint_gains2
+    joints:
+    - $(arg robot_2_prefix)_mico_joint_1
+    - $(arg robot_2_prefix)_mico_joint_2
+    - $(arg robot_2_prefix)_mico_joint_3
+    - $(arg robot_2_prefix)_mico_joint_4
+    - $(arg robot_2_prefix)_mico_joint_5
+    - $(arg robot_2_prefix)_mico_joint_6
+    type: position_controllers/JointTrajectoryController
+
+
+
 
 $(arg robot_2_prefix)_effort_finger_trajectory_controller:
     constraints:

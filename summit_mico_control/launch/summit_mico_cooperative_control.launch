@@ -23,6 +23,9 @@
     <arg name="robot_2_trajectory" default="false"/>
     <arg name="robot_3_trajectory" default="false"/>
 
+    <arg name="load_more_controllers" default="false"/>
+    <arg name="load_platform_controllers" default="false"/>
+
 
     <!-- Now choose the proper controllers -->
     <arg name="robot_1_platform_controller" value="$(arg robot_1_prefix)_platform_state_controller" if="$(eval arg('agents') >= 1 )"/>
@@ -43,30 +46,45 @@
     <arg name="robot_3_arm_controller" value="$(arg robot_3_prefix)_$(arg robot_3_interface)_joint_trajectory_controller" if="$(eval arg('agents') == 3 and arg('robot_3_trajectory'))"/>
     <arg name="robot_3_arm_controller" value="" unless="$(eval arg('agents') == 3 and arg('robot_3_trajectory'))"/>
 
-
+    <arg name="platform_controllers" value="$(arg robot_1_platform_controller)  $(arg robot_2_platform_controller)  $(arg robot_3_platform_controller)" if="$(arg load_platform_controllers)"/>
+    <arg name="platform_controllers" value="" unless="$(arg load_platform_controllers)"/>
 
     <!-- LOAD CONTROLLERS -->
     <rosparam file="$(find summit_mico_control)/config/cooperative_mico_gazebo_control.yaml" command="load" subst_value="true"/>
     <rosparam file="$(find summit_mico_control)/config/cooperative_summit_gazebo_control.yaml" command="load" subst_value="true"/>
 
+    <!-- LOAD YOUR CONTROLLER YAML FILE -->
+    <arg name="controllers" value="$(arg robot_1_prefix)/impedance_controller" if="$(eval arg('agents') == 1)" />
+    <arg name="controllers" value="$(arg robot_1_prefix)/impedance_controller $(arg robot_2_prefix)/impedance_controller" if="$(eval arg('agents') >= 2)" />
+    
+    <rosparam file="$(find force_controllers)/config/cooperative_force_controllers.yaml" command="load" subst_value="true" if="$(arg load_more_controllers)"/>
+    <arg name="new_controller_paused" value="" unless="$(arg load_more_controllers)"/>
+    <arg name="new_controller_paused" value="$(arg robot_1_prefix)/impedance_controller " if="$(arg load_more_controllers)"/>
+
+    <!-- $(arg robot_2_prefix)/admittance_controller -->
+    <!-- <rosparam file="$(find summit_mico_control)/config/cooperative_summit_gazebo_control.yaml" command="load" subst_value="true"/> -->
 
     <!-- Spawn the proper controllers -->
-    <node name="mico_trajectory_controllers_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+    <node name="cooperative_trajectory_controllers_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
     joint_state_controller
-    $(arg robot_1_platform_controller)
     $(arg robot_1_arm_controller)
-    $(arg robot_2_platform_controller)
     $(arg robot_2_arm_controller)
-    $(arg robot_3_platform_controller)
     $(arg robot_3_arm_controller)
+    $(arg platform_controllers)
+     "/>
+
+     <!-- $(arg robot_2_arm_controller) -->
+
+     <node name="cooperative_new_trajectory_controllers_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+    $(arg new_controller_paused)
      "/>
 
     <!-- Robot state publisher -->
     <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
-        <param name="publish_frequency" type="double" value="200.0"/>
+        <param name="publish_frequency" type="double" value="500.0"/>
     </node>
 
 
 
-</launch>
 
+</launch>

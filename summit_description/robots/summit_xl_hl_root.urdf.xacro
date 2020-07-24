@@ -20,7 +20,7 @@
 
 
 
-    <xacro:macro name="summit_xl_robot" params="prefix *origin kinematic_model:='omni' kinect:=true mini_pc:=true enable_ros_control:=true publish_tf:=false virtual_platform_joints:=false">
+    <xacro:macro name="summit_xl_robot" params="prefix *origin kinematic_model:='omni' kinect:=true mini_pc:=true enable_ros_control:=true publish_tf:=false virtual_platform_joints:=false interface:='velocity'">
 
 
 
@@ -71,7 +71,7 @@
             <xacro:property name="wheel_radius" value="0.11" />
         </xacro:unless>
 
-        <xacro:summit_xl_hl_base prefix="${prefix}" publish_bf="true" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}">
+        <xacro:summit_xl_hl_base prefix="${prefix}" publish_bf="true" hq="${hq}" virtual_platform_joints="${virtual_platform_joints}" interface="${interface}">
             <xacro:insert_block name="origin" />
         </xacro:summit_xl_hl_base>
 
@@ -252,4 +252,3 @@
 
     </xacro:macro>
 </robot>
-

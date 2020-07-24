@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root version="2.3.8">
+ <tabbed_widget name="Main Window" parent="main_window">
+  <plotmatrix rows="3" columns="2" tab_name="plot">
+   <plot col="0" style="Lines" row="0">
+    <range top="-0.088213" bottom="-1.016600" right="34.509000" left="24.509000"/>
+    <limitY/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_continuous_z/position" R="188" B="34" G="189" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_continuous_z/velocity" R="26" B="56" G="201" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_prismatic_x/position" R="23" B="207" G="190" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_prismatic_x/velocity" R="214" B="40" G="39" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_prismatic_y/position" R="148" B="189" G="103" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_prismatic_y/velocity" R="31" B="180" G="119" custom_transform="noTransform"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot col="0" style="Lines" row="1">
+    <range top="0.100000" bottom="-0.100000" right="0.000000" left="0.000000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot col="0" style="Lines" row="2">
+    <range top="2.474951" bottom="-1.823469" right="34.509000" left="24.509000"/>
+    <limitY/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_mico_joint_1/effort" R="241" B="193" G="76" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_mico_joint_2/effort" R="148" B="189" G="103" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_mico_joint_3/effort" R="23" B="207" G="190" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_mico_joint_4/effort" R="188" B="34" G="189" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_mico_joint_5/effort" R="31" B="180" G="119" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_mico_joint_6/effort" R="214" B="40" G="39" custom_transform="noTransform"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot col="1" style="Lines" row="0">
+    <range top="971.253356" bottom="-622.420135" right="34.509000" left="24.509000"/>
+    <limitY/>
+    <curve name="/mm2/admittance_controller/ft_corrected/wrench/force/x" R="23" B="207" G="190" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/ft_corrected/wrench/force/y" R="188" B="34" G="189" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/ft_corrected/wrench/force/z" R="31" B="180" G="119" custom_transform="noTransform"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot col="1" style="Lines" row="1">
+    <range top="42275.449432" bottom="-42856.824833" right="34.509000" left="24.509000"/>
+    <limitY/>
+    <curve name="/mm2/admittance_controller/ftdot_corrected/wrench/force/x" R="214" B="40" G="39" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/ftdot_corrected/wrench/force/y" R="26" B="56" G="201" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/ftdot_corrected/wrench/force/z" R="255" B="14" G="127" custom_transform="noTransform"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot col="1" style="Lines" row="2">
+    <range top="-0.675041" bottom="-0.975216" right="34.509000" left="24.509000"/>
+    <limitY/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_continuous_z/effort" R="26" B="56" G="201" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_prismatic_x/effort" R="255" B="14" G="127" custom_transform="noTransform"/>
+    <curve name="/mm2/admittance_controller/error_joints/mm2_platform_prismatic_y/effort" R="241" B="193" G="76" custom_transform="noTransform"/>
+    <transform value="noTransform"/>
+   </plot>
+  </plotmatrix>
+  <currentPlotMatrix index="0"/>
+ </tabbed_widget>
+ <use_relative_time_offset enabled="1"/>
+ <!-- - - - - - - - - - - - - - - -->
+ <!-- - - - - - - - - - - - - - - -->
+ <Plugins>
+  <plugin ID="DataLoad CSV">
+   <default time_axis=""/>
+  </plugin>
+  <plugin ID="DataLoad ROS bags">
+   <use_header_stamp value="false"/>
+   <use_renaming_rules value="true"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+  </plugin>
+  <plugin ID="DataLoad ULog"/>
+  <plugin ID="ROS Topic Subscriber">
+   <use_header_stamp value="false"/>
+   <use_renaming_rules value="true"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+  </plugin>
+  <plugin ID="ROS /rosout Visualization" status="idle"/>
+  <plugin ID="ROS Topic Re-Publisher" status="idle"/>
+ </Plugins>
+ <!-- - - - - - - - - - - - - - - -->
+ <previouslyLoaded_Datafiles/>
+ <previouslyLoaded_Streamer name="ROS Topic Subscriber"/>
+ <!-- - - - - - - - - - - - - - - -->
+ <customMathEquations/>
+ <snippets>
+  <snippet name="1st_derivative" language="JS">
+   <global>var prevX = 0
+var prevY = 0</global>
+   <equation>dx = time - prevX
+dy = value - prevY
+prevX = time
+prevY = value
+
+return dy/dx</equation>
+  </snippet>
+  <snippet name="1st_order_lowpass" language="JS">
+   <global>var prevY = 0
+var alpha = 0.1</global>
+   <equation>prevY = alpha * value + (1.-alpha) * prevY
+
+return prevY</equation>
+  </snippet>
+  <snippet name="2D_velocity" language="JS">
+   <global>var prev_x = 0
+var prev_y = 0
+var prev_t = 0</global>
+   <equation>X = $$your_odometry/position/x$$
+Y = $$your_odometry/position/y$$
+
+var dist = sqrt( (X-prev_x)*(X-prev_x) + (Y-prev_y)*(Y-prev_y) )
+var dT = time - prev_t
+
+prev_x = X
+prev_y = Y
+prev_t = time
+
+return dist / dT</equation>
+  </snippet>
+  <snippet name="average_two_curves" language="JS">
+   <global></global>
+   <equation>a = $$PLOT_A$$
+b = $$PLOT_B$$
+
+return (a+b)/2</equation>
+  </snippet>
+  <snippet name="integral" language="JS">
+   <global>var integral = 0</global>
+   <equation>integral += value
+return integral</equation>
+  </snippet>
+  <snippet name="rad_to_deg" language="JS">
+   <global></global>
+   <equation>return value*180/3.1417</equation>
+  </snippet>
+  <snippet name="remove_offset" language="JS">
+   <global>var is_first = true
+var first_value = 0</global>
+   <equation>if (is_first)
+{
+  is_first = false
+  first_value = value
+}
+
+return value - first_value</equation>
+  </snippet>
+  <snippet name="yaw_from_quaternion" language="JS">
+   <global>// source: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+
+function quaternionToYaw(x, y, z, w)
+{
+  // yaw (z-axis rotation)
+  t1 = 2.0 * (w * z + x * y);
+  t2 = 1.0 - 2.0 * (y * y + z * z);
+  yaw = Math.atan2(t1, t2);
+
+  return yaw
+}</global>
+   <equation>return quaternionToYaw(x, y, z, w);</equation>
+  </snippet>
+ </snippets>
+ <!-- - - - - - - - - - - - - - - -->
+</root>
+

@@ -1,0 +1,15 @@
+pub_seperate_joint_state:
+  joints:
+    [
+      $(arg robot_prefix)_platform_prismatic_x,
+      $(arg robot_prefix)_platform_prismatic_y,
+      $(arg robot_prefix)_platform_continuous_z,
+      $(arg robot_prefix)_mico_joint_1,
+      $(arg robot_prefix)_mico_joint_2,
+      $(arg robot_prefix)_mico_joint_3,
+      $(arg robot_prefix)_mico_joint_4,
+      $(arg robot_prefix)_mico_joint_5,
+      $(arg robot_prefix)_mico_joint_6
+    ]
+  joint_states_topic: /joint_states
+  namespace: /$(arg robot_prefix)

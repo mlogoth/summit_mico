@@ -40,6 +40,13 @@ add_library(${PROJECT_NAME}
    src/platform_state_controller.cpp
 )
 
+
+
+add_executable(pub_seperate_joint_state src/pub_seperate_joint_state.cpp)
+add_dependencies(pub_seperate_joint_state ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(pub_seperate_joint_state ${catkin_LIBRARIES})
+
+
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )

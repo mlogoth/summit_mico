@@ -5,7 +5,7 @@
 
   <xacro:include filename="$(find summit_description)/urdf/bases/summit_xl_base.gazebo.xacro" />
 
-  <xacro:macro name="summit_xl_hl_base" params="prefix publish_bf hq virtual_platform_joints:=false *origin">
+  <xacro:macro name="summit_xl_hl_base" params="prefix publish_bf hq virtual_platform_joints:=false interface:='velocity' *origin">
 
     <!-- Robot mechanical and motor parameters -->
     <xacro:property name="PI" value="3.1415926535897931"/>
@@ -21,9 +21,9 @@
           </geometry>
         </visual>
         <inertial>
-          <mass value="155.0" />
+          <mass value="15.0" />
           <origin xyz="0 0 0" />
-          <inertia ixx="230.391" ixy="0.004" ixz="0.0" iyy="236.853" iyz="0.0" izz="36.125" />
+          <inertia ixx="30.391" ixy="0.004" ixz="0.0" iyy="36.853" iyz="0.0" izz="36.125" />
         </inertial>
       </link>
 
@@ -38,9 +38,9 @@
     <!-- BASE_LINK -->
     <link name="${prefix}base_link">
       <inertial>
-        <mass value="155.0" />
+        <mass value="15.0" />
         <origin xyz="0 0 0" />
-        <inertia ixx="230.391" ixy="0.004" ixz="0.0" iyy="236.853" iyz="0.0" izz="36.125" />
+        <inertia ixx="23.391" ixy="0.004" ixz="0.0" iyy="23.853" iyz="0.0" izz="36.125" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -72,25 +72,25 @@
 
       <link name="${prefix}world">
         <inertial>
-          <mass value="1.0" />
+          <mass value="5.0" />
           <origin xyz="0 0 0" />
-          <inertia ixx="1.0" ixy="0.004" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+          <inertia ixx="5.0" ixy="0.00" ixz="0.0" iyy="5.0" iyz="0.0" izz="5.0" />
         </inertial>
       </link>
       <!-- robot world -> prismatic (x) -> linear_1 -->
       <link name="${prefix}platform_linear_1">
         <inertial>
-          <mass value="1.0" />
+          <mass value="5.0" />
           <origin xyz="0 0 0" />
-          <inertia ixx="1.0" ixy="0.004" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+          <inertia ixx="5.0" ixy="0.00" ixz="0.0" iyy="5.0" iyz="0.0" izz="5.0" />
         </inertial>
       </link>
       <!-- linear_1 -> prismatic (y) -> linear_2 -->
       <link name="${prefix}platform_linear_2">
         <inertial>
-          <mass value="1.0" />
+          <mass value="5.0" />
           <origin xyz="0 0 0" />
-          <inertia ixx="1.0" ixy="0.004" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+          <inertia ixx="5.0" ixy="0.00" ixz="0.0" iyy="5.0" iyz="0.0" izz="5.0" />
         </inertial>
       </link>
 
@@ -99,8 +99,8 @@
         <parent link="${prefix}world"/>
         <child link="${prefix}platform_linear_1" />
         <axis xyz="1 0 0"/>
-        <limit lower="-500" upper="500" effort="1000" velocity="4"/>
-        <joint_properties damping="0.1" friction="0.0"/>
+        <limit lower="-500" upper="500" effort="1000" velocity="6"/>
+        <joint_properties damping="1.5" friction="0.4"/>
       </joint>
 
       <joint name="${prefix}platform_prismatic_y" type="prismatic">
@@ -108,8 +108,8 @@
         <parent link="${prefix}platform_linear_1"/>
         <child link="${prefix}platform_linear_2" />
         <axis xyz="0 1 0"/>
-        <limit lower="-500" upper="500" effort="1000" velocity="4"/>
-        <joint_properties damping="0.1" friction="0.0"/>
+        <limit lower="-500" upper="500" effort="1000" velocity="6"/>
+        <joint_properties damping="1.5" friction="0.4"/>
       </joint>
 
       <joint name="${prefix}platform_continuous_z" type="continuous">
@@ -117,17 +117,31 @@
         <parent link="${prefix}platform_linear_2"/>
         <child link="${prefix}base_footprint" />
         <axis xyz="0 0 1"/>
-        <limit lower="-500" upper="500" effort="1000" velocity="4"/>
-        <joint_properties damping="0.1" friction="0.0"/>
+        <limit lower="-500" upper="500" effort="1000" velocity="6"/>
+        <joint_properties damping="1.5" friction="0.4"/>
       </joint>
+
+      <xacro:if value="${interface == 'position'}">
+        <xacro:property name="hwInterface" value="hardware_interface/PositionJointInterface"/>
+      </xacro:if>
+
+      <xacro:if value="${interface == 'effort'}">
+        <xacro:property name="hwInterface" value="hardware_interface/EffortJointInterface"/>
+      </xacro:if>
+
+      <xacro:unless value="${interface in ['position','effort']}">
+        <xacro:property name="hwInterface" value="hardware_interface/VelocityJointInterface"/>
+      </xacro:unless>
+
+
 
       <transmission name="${prefix}platform_prismatic_x_trans">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="${prefix}platform_prismatic_x">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <hardwareInterface>${hwInterface}</hardwareInterface>
         </joint>
         <actuator name="${prefix}platform_prismatic_x_actuator">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <hardwareInterface>${hwInterface}</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
       </transmission>
@@ -135,10 +149,10 @@
       <transmission name="${prefix}platform_prismatic_y_trans">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="${prefix}platform_prismatic_y">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <hardwareInterface>${hwInterface}</hardwareInterface>
         </joint>
         <actuator name="${prefix}platform_prismatic_y_actuator">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <hardwareInterface>${hwInterface}</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
       </transmission>
@@ -146,10 +160,10 @@
       <transmission name="${prefix}platform_continuous_z_trans">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="${prefix}platform_continuous_z">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <hardwareInterface>${hwInterface}</hardwareInterface>
         </joint>
         <actuator name="${prefix}platform_continuous_z_actuator">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+          <hardwareInterface>${hwInterface}</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
       </transmission>
@@ -159,4 +173,3 @@
 
   </xacro:macro>
 </robot>
-

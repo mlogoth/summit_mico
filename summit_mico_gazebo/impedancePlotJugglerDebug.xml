@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root version="2.3.8">
+ <tabbed_widget parent="main_window" name="Main Window">
+  <plotmatrix tab_name="plot" rows="3" columns="2">
+   <plot style="Lines" col="0" row="0">
+    <range top="678.992634" right="8.968000" bottom="-685.535032" left="3.968000"/>
+    <limitY/>
+    <curve B="14" custom_transform="noTransform" G="127" R="255" name="/mm1/impedance_controller/error_orientation/vector/x"/>
+    <curve B="193" custom_transform="noTransform" G="76" R="241" name="/mm1/impedance_controller/error_orientation/vector/y"/>
+    <curve B="189" custom_transform="noTransform" G="103" R="148" name="/mm1/impedance_controller/error_orientation/vector/z"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="0" row="1">
+    <range top="0.234772" right="-2.462000" bottom="-5.505475" left="-7.462000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="0" row="2">
+    <range top="706.969402" right="8.968000" bottom="-664.726979" left="3.968000"/>
+    <limitY/>
+    <curve B="207" custom_transform="noTransform" G="190" R="23" name="/mm1/impedance_controller/error_position/vector/x"/>
+    <curve B="34" custom_transform="noTransform" G="189" R="188" name="/mm1/impedance_controller/error_position/vector/y"/>
+    <curve B="180" custom_transform="noTransform" G="119" R="31" name="/mm1/impedance_controller/error_position/vector/z"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="0">
+    <range top="954.408034" right="-22.636000" bottom="-927.605602" left="-27.636000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="1">
+    <range top="954.373696" right="-21.706000" bottom="-927.613375" left="-26.706000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="2">
+    <range top="0.905819" right="-17.688000" bottom="-0.789533" left="-22.688000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+  </plotmatrix>
+  <plotmatrix tab_name="plot" rows="2" columns="2">
+   <plot style="Lines" col="0" row="0">
+    <range top="898.223546" right="-24.710000" bottom="-870.934441" left="-29.276500"/>
+    <limitY/>
+    <curve B="189" custom_transform="noTransform" G="103" R="148" name="/mm1/impedance_controller/ft_corrected/wrench/force/x"/>
+    <curve B="207" custom_transform="noTransform" G="190" R="23" name="/mm1/impedance_controller/ft_corrected/wrench/force/y"/>
+    <curve B="34" custom_transform="noTransform" G="189" R="188" name="/mm1/impedance_controller/ft_corrected/wrench/force/z"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="0" row="1">
+    <range top="828.992953" right="-24.710000" bottom="-830.829514" left="-29.276500"/>
+    <limitY/>
+    <curve B="14" custom_transform="noTransform" G="127" R="255" name="/mm1/impedance_controller/ft_corrected/wrench/torque/x"/>
+    <curve B="193" custom_transform="noTransform" G="76" R="241" name="/mm1/impedance_controller/ft_corrected/wrench/torque/y"/>
+    <curve B="189" custom_transform="noTransform" G="103" R="148" name="/mm1/impedance_controller/ft_corrected/wrench/torque/z"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="0">
+    <range top="858.983659" right="-24.710500" bottom="-910.174323" left="-29.275500"/>
+    <limitY/>
+    <curve B="207" custom_transform="noTransform" G="190" R="23" name="/mm1_mico_joint_6/ft_sensor/wrench/force/x"/>
+    <curve B="34" custom_transform="noTransform" G="189" R="188" name="/mm1_mico_joint_6/ft_sensor/wrench/force/y"/>
+    <curve B="180" custom_transform="noTransform" G="119" R="31" name="/mm1_mico_joint_6/ft_sensor/wrench/force/z"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="1">
+    <range top="472.693723" right="-24.711000" bottom="-600.413479" left="-29.276500"/>
+    <limitY/>
+    <curve B="40" custom_transform="noTransform" G="39" R="214" name="/mm2_mico_joint_6/ft_sensor/wrench/force/x"/>
+    <curve B="56" custom_transform="noTransform" G="201" R="26" name="/mm2_mico_joint_6/ft_sensor/wrench/force/y"/>
+    <curve B="14" custom_transform="noTransform" G="127" R="255" name="/mm2_mico_joint_6/ft_sensor/wrench/force/z"/>
+    <transform value="noTransform"/>
+   </plot>
+  </plotmatrix>
+  <plotmatrix tab_name="plot" rows="2" columns="2">
+   <plot style="Lines" col="0" row="0">
+    <range top="391.263265" right="-25.605500" bottom="-357.989745" left="-29.275500"/>
+    <limitY/>
+    <curve B="189" custom_transform="noTransform" G="103" R="148" name="/mm1_mico_joint_6/ft_sensor/wrench/force/x"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="0" row="1">
+    <range top="858.983659" right="-25.605500" bottom="-910.174323" left="-29.275500"/>
+    <limitY/>
+    <curve B="207" custom_transform="noTransform" G="190" R="23" name="/mm1_mico_joint_6/ft_sensor/wrench/force/y"/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="0">
+    <range top="0.100000" right="0.000000" bottom="-0.100000" left="0.000000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+   <plot style="Lines" col="1" row="1">
+    <range top="0.100000" right="0.000000" bottom="-0.100000" left="0.000000"/>
+    <limitY/>
+    <transform value="noTransform"/>
+   </plot>
+  </plotmatrix>
+  <currentPlotMatrix index="0"/>
+ </tabbed_widget>
+ <use_relative_time_offset enabled="1"/>
+ <!-- - - - - - - - - - - - - - - -->
+ <!-- - - - - - - - - - - - - - - -->
+ <Plugins>
+  <plugin ID="DataLoad CSV">
+   <default time_axis=""/>
+  </plugin>
+  <plugin ID="DataLoad ROS bags">
+   <use_header_stamp value="false"/>
+   <use_renaming_rules value="true"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+  </plugin>
+  <plugin ID="DataLoad ULog"/>
+  <plugin ID="ROS Topic Subscriber">
+   <use_header_stamp value="false"/>
+   <use_renaming_rules value="true"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+  </plugin>
+  <plugin ID="ROS /rosout Visualization" status="idle"/>
+  <plugin ID="ROS Topic Re-Publisher" status="idle"/>
+ </Plugins>
+ <!-- - - - - - - - - - - - - - - -->
+ <previouslyLoaded_Datafiles/>
+ <previouslyLoaded_Streamer name="ROS Topic Subscriber"/>
+ <!-- - - - - - - - - - - - - - - -->
+ <customMathEquations/>
+ <snippets>
+  <snippet language="JS" name="1st_derivative">
+   <global>var prevX = 0
+var prevY = 0</global>
+   <equation>dx = time - prevX
+dy = value - prevY
+prevX = time
+prevY = value
+
+return dy/dx</equation>
+  </snippet>
+  <snippet language="JS" name="1st_order_lowpass">
+   <global>var prevY = 0
+var alpha = 0.1</global>
+   <equation>prevY = alpha * value + (1.-alpha) * prevY
+
+return prevY</equation>
+  </snippet>
+  <snippet language="JS" name="2D_velocity">
+   <global>var prev_x = 0
+var prev_y = 0
+var prev_t = 0</global>
+   <equation>X = $$your_odometry/position/x$$
+Y = $$your_odometry/position/y$$
+
+var dist = sqrt( (X-prev_x)*(X-prev_x) + (Y-prev_y)*(Y-prev_y) )
+var dT = time - prev_t
+
+prev_x = X
+prev_y = Y
+prev_t = time
+
+return dist / dT</equation>
+  </snippet>
+  <snippet language="JS" name="average_two_curves">
+   <global></global>
+   <equation>a = $$PLOT_A$$
+b = $$PLOT_B$$
+
+return (a+b)/2</equation>
+  </snippet>
+  <snippet language="JS" name="integral">
+   <global>var integral = 0</global>
+   <equation>integral += value
+return integral</equation>
+  </snippet>
+  <snippet language="JS" name="rad_to_deg">
+   <global></global>
+   <equation>return value*180/3.1417</equation>
+  </snippet>
+  <snippet language="JS" name="remove_offset">
+   <global>var is_first = true
+var first_value = 0</global>
+   <equation>if (is_first)
+{
+  is_first = false
+  first_value = value
+}
+
+return value - first_value</equation>
+  </snippet>
+  <snippet language="JS" name="yaw_from_quaternion">
+   <global>// source: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+
+function quaternionToYaw(x, y, z, w)
+{
+  // yaw (z-axis rotation)
+  t1 = 2.0 * (w * z + x * y);
+  t2 = 1.0 - 2.0 * (y * y + z * z);
+  yaw = Math.atan2(t1, t2);
+
+  return yaw
+}</global>
+   <equation>return quaternionToYaw(x, y, z, w);</equation>
+  </snippet>
+ </snippets>
+ <!-- - - - - - - - - - - - - - - -->
+</root>
+
