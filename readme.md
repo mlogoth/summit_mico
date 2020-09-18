@@ -50,7 +50,7 @@ In the ```cooperative.launch```, you can properly modify the arguments below if 
     <arg name="robot_2_dx" default="0"/>
     <arg name="robot_3_dx" default="0"/>
 ```
-* Arguments Explanation:
+### Arguments Explanation:
 
 __Number of Agents__ (Maximum Implemented: 3):
 ```xml
@@ -90,4 +90,49 @@ __Object Properties__ :
 ```
 ```
 type: box|cylinder 
+```
+### Startup controllers
+The ```cooperative.launch``` file includes the ```summit_mico_cooperative_control.launch```, located in 
+```summit_mico_control``` ROS package, with the below arguments:
+```xml
+    <include file="$(find summit_mico_control)/launch/summit_mico_cooperative_control.launch">
+        
+        <arg name="agents" value= "$(arg agents)"/>
+        <!-- namespace prefix -->
+        <arg name="robot_1_prefix" value="$(arg robot_1_prefix)"/>
+        <arg name="robot_2_prefix" value="$(arg robot_2_prefix)"/>
+        <arg name="robot_3_prefix" value="$(arg robot_3_prefix)"/>
+
+        <!-- platform kinematic mode -->
+        <arg name="robot_1_platform" value="$(arg platform_mode)"/>
+        <arg name="robot_2_platform" value="$(arg platform_mode2)"/>
+        <arg name="robot_3_platform" value="$(arg platform_mode3)"/>
+
+        <!-- joint interface ros -->
+        <arg name="robot_1_interface" value="$(arg arm_interface)"/>
+        <arg name="robot_2_interface" value="$(arg arm_interface2)"/>
+        <arg name="robot_3_interface" value="$(arg arm_interface3)"/>
+
+        <!-- Use ros joint trajectory controller -->
+        <arg name="robot_1_trajectory" value="$(eval robot_1.split()[5])"/>
+        <arg name="robot_2_trajectory" value="$(eval robot_2.split()[5])"/>
+        <arg name="robot_3_trajectory" value="$(eval robot_3.split()[5])"/>
+
+        <!-- Use your ros controller => must modify the launch file -->
+        <arg name="load_more_controllers" value="true"/>
+    </include>
+```
+
+If you have created your own ros controllers and you like to test them set the parameter ```load_more_controllers``` to ```true``` and add them in this segment of the :
+
+```xml
+   <!-- LOAD YOUR CONTROLLER YAML FILE -->
+    <rosparam file="$(find {YOUR_CONTROLLERS_PACKAGE})/config/{YOUR_CONTROLLERS_CONFIG}.yaml" command="load" subst_value="true" if="$(arg load_more_controllers)"/>
+    <arg name="new_controller_paused" value="" unless="$(arg load_more_controllers)"/>
+    <arg name="new_controller_paused" value="$(arg robot_1_prefix)/{YOUR_CONTROLLER_NAME} " if="$(arg load_more_controllers)"/>
+
+<!-- YOUR CONTROLLERS WILL BE LOADED, NOT RUNNING-->
+ <node name="cooperative_new_trajectory_controllers_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+    $(arg new_controller_paused)
+     "/>
 ```
