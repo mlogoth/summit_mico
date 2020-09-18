@@ -123,7 +123,7 @@ The ```cooperative.launch``` file includes the ```summit_mico_cooperative_contro
     </include>
 ```
 
-If you have created your own ros controllers and you like to test them set the parameter ```load_more_controllers``` to ```true``` and add them in this segment of the :
+If you have created your own ros controllers and you like to test them set the parameter ```load_more_controllers``` to ```true``` and add them in this segment of the ```summit_mico_cooperative_control.launch``` file:
 
 ```xml
    <!-- LOAD YOUR CONTROLLER YAML FILE -->
