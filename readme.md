@@ -57,7 +57,7 @@ __Number of Agents__ (Maximum Implemented: 3):
  <!-- num of agents -->
  <arg name="agents" default="2"/>
 ```
-__Robotic Agent Properties__ (Maximum Implemented: 3):
+__Robotic Agent Properties__:
 
 ```xml
  <!-- robot properties "prefix platform_mode arm_interface color camera use_trajectory" -->
